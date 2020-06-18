@@ -57,6 +57,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
 
     modifier onlyValidID(uint id) {
         require(mapTokenPairInfo[id].toAccount != address(0), "token Pair not exists");
+        require(!(mapTokenPairInfo[id].isDelete), "token deleted");
         _;
     }
 
@@ -195,7 +196,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapTokenPairInfo[id] = TokenPairInfo(fromChainID, toChainID, fromAccount, tokenInst, false);
         mapAncestorInfo[id] = AncestorInfo(aInfo.ancestorAccount, aInfo.ancestorName, aInfo.ancestorSymbol,
                                         aInfo.ancestorDecimals, aInfo.ancestorChainID);
-        mapTokenInfo[id] = TokenInfo(tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
 
         totalTokenPairs = totalTokenPairs + 1;
 
@@ -209,7 +209,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     /// @param ancestorAccount       token ancestor address
     /// @param ancestorName          token ancestor name
     /// @param ancestorSymbol        token ancestor symbol
-    /// @param ancestorDecimals      token ancestor decimals
     /// @param ancestorChainID       token ancestor chainID
     function updateAncestorInfo(
         uint    id,
@@ -217,7 +216,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         bytes   ancestorAccount,
         bytes   ancestorName,
         bytes   ancestorSymbol,
-        uint8   ancestorDecimals,
         uint    ancestorChainID
     )
         public
@@ -231,33 +229,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapAncestorInfo[id].ancestorAccount = ancestorAccount;
         mapAncestorInfo[id].ancestorName = ancestorName;
         mapAncestorInfo[id].ancestorSymbol = ancestorSymbol;
-        mapAncestorInfo[id].ancestorDecimals = ancestorDecimals;
         mapAncestorInfo[id].ancestorChainID = ancestorChainID;
-    }
-
-    /// @notice                      add a supported token
-    /// @dev                         add a supported token
-    /// @param id                    token pair id start from 1
-    /// @param name                  token name
-    /// @param symbol                token symbol
-    /// @param decimals              token decimals
-    function updateTokenInfo(
-        uint    id,
-
-        bytes   name,
-        bytes   symbol,
-        uint8   decimals
-    )
-        public
-        onlyOwner
-        onlyValidID(id)
-    {
-        require(name.length != 0, "name is null");
-        require(symbol.length != 0, "symbol is null");
-
-        mapTokenInfo[id].name = name;
-        mapTokenInfo[id].symbol = symbol;
-        mapTokenInfo[id].decimals = decimals;
     }
 
     /// @notice                      add a supported token
@@ -282,6 +254,16 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapTokenPairInfo[id].fromChainID = fromChainID;
         mapTokenPairInfo[id].toChainID = toChainID;
         mapTokenPairInfo[id].fromAccount = fromAccount;
+    }
+
+    function removeTokenPair(
+        uint id
+    )
+        public
+        onlyOwner
+        onlyValidID(id)
+    {
+        mapTokenPairInfo[id].isDelete = true;
     }
 
     function mintToken(

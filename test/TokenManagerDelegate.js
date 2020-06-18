@@ -55,26 +55,22 @@ contract('TokenManagerDelegate', (accounts) => {
 
   describe('normal', () => {
     it.only('good complex example', async function() {
-      try {
-        let totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
-        funcMemberParam[0] = totalTokenPairs + 1;
-        await tokenManagerDelegate.addTokenPair(...funcMemberParam, {from: owner});
-        await tokenManagerDelegate.setFeeRatio(asciiFromChainID, asciiToChainID, 100, {from: owner});
-        await tokenManagerDelegate.setFeeRatio(asciiToChainID, asciiFromChainID, 90, {from: owner});
-        await tokenManagerDelegate.addAdmin(admin, {from: owner});
-        await tokenManagerDelegate.mintToken(funcMemberParam[0], other, 100, {from: admin});
-  
-        totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
-        const tokenPairInfo = await tokenManagerDelegate.mapTokenPairInfo(totalTokenPairs);
-        const token = await MappingToken.at(tokenPairInfo.toAccount);
-        await token.transfer(admin, 80, {from: other});
-        await tokenManagerDelegate.burnToken(funcMemberParam[0], 20, {from: admin});
-  
-        assert.equal(web3.utils.toBN(await token.balanceOf(admin)).toNumber(), 60);
-        assert.equal(web3.utils.toBN(await token.balanceOf(other)).toNumber(), 20);
-      } catch (e) {
-        console.log(JSON.stringify(e))
-      }
+      let totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
+      funcMemberParam[0] = totalTokenPairs + 1;
+      await tokenManagerDelegate.addTokenPair(...funcMemberParam, {from: owner});
+      await tokenManagerDelegate.setFeeRatio(asciiFromChainID, asciiToChainID, 100, {from: owner});
+      await tokenManagerDelegate.setFeeRatio(asciiToChainID, asciiFromChainID, 90, {from: owner});
+      await tokenManagerDelegate.addAdmin(admin, {from: owner});
+      await tokenManagerDelegate.mintToken(funcMemberParam[0], other, 100, {from: admin});
+
+      totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
+      const tokenPairInfo = await tokenManagerDelegate.mapTokenPairInfo(totalTokenPairs);
+      const token = await MappingToken.at(tokenPairInfo.toAccount);
+      await token.transfer(admin, 80, {from: other});
+      await tokenManagerDelegate.burnToken(funcMemberParam[0], 20, {from: admin});
+
+      assert.equal(web3.utils.toBN(await token.balanceOf(admin)).toNumber(), 60);
+      assert.equal(web3.utils.toBN(await token.balanceOf(other)).toNumber(), 20);
     });
   })
 

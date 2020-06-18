@@ -81,7 +81,6 @@ contract TokenManagerStorage is BasicStorage {
     mapping(address => bool) public mapAdmin;
 
     /// a map from a sequence ID to token pair
-    mapping(uint => TokenInfo) public mapTokenInfo;
     mapping(uint => AncestorInfo) public mapAncestorInfo;
     mapping(uint => TokenPairInfo) public mapTokenPairInfo;
 

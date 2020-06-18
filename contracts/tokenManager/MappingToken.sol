@@ -118,4 +118,12 @@ contract MappingToken is StandardToken, Owned {
 
         emit TokenBurntLogger(account, value, totalSupply);
     }
+
+    function update(string _name, string _symbol)
+        external
+        onlyOwner
+    {
+        name = _name;
+        symbol = _symbol;
+    }
 }
