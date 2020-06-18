@@ -42,6 +42,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
      * EVENTS
      *
      */
+     event TokenAdd(uint id, address toAccount, bytes name, bytes symbol, uint8 decimals);
 
     /**
      *
@@ -54,13 +55,24 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         _;
     }
 
-    // modifier onlyHTLC {
-    //     require(msg.sender == htlcAddr, "Sender is not allowed");
-    //     _;
-    // }
+    modifier onlyValidID(uint id) {
+        require(mapTokenPairInfo[id].toAccount != address(0), "token Pair not exists");
+        _;
+    }
 
     modifier onlyMeaningfulValue(uint value) {
         require(value > 0, "Value is null");
+        _;
+    }
+
+    modifier onChain(uint from, uint to) {
+        require(from != to, "same chain");
+        require((from == chainID) || (to == chainID), "not this chain");
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(mapAdmin[msg.sender], "not admin");
         _;
     }
 
@@ -76,180 +88,275 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         revert("Not support");
     }
 
-    // /// @notice                      check if a tokenOrigAccount has been supported
-    // /// @dev                         check if a tokenOrigAccount has been supported
-    // /// @param tokenOrigAccount      tokenOrigAccount to be added
-    // function isTokenRegistered(bytes tokenOrigAccount)
-    //     external
-    //     view
-    //     returns(bool)
-    // {
-    //     // TokenInfo storage tokenInfo = mapTokenInfo[tokenOrigAccount];
 
-    //     // return tokenInfo.tokenWanAddr != address(0);
+    /// @notice                      add a supported token
+    /// @dev                         add a supported token
+    /// @param x                     x address
+    function toBytes(address x) public pure returns (bytes b) {
+        b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+    }
+
+    // /// @notice                      add a supported token
+    // /// @dev                         add a supported token
+    // /// @param id                    token pair id start from 1
+    // /// @param ancestorAccount       token ancestor address
+    // /// @param ancestorName          token ancestor name
+    // /// @param ancestorSymbol        token ancestor symbol
+    // /// @param ancestorDecimals      token ancestor decimals
+    // /// @param ancestorChainID       token ancestor chainID
+    // /// @param fromChainID           token from chainID
+    // /// @param toChainID             token to chainID
+    // /// @param fromAccount           token from address
+    // /// @param name                  token name
+    // /// @param symbol                token symbol
+    // /// @param decimals              token decimals
+    // function addTokenPair(
+    //     uint    id,
+
+    //     bytes   ancestorAccount,
+    //     bytes   ancestorName,
+    //     bytes   ancestorSymbol,
+    //     uint8   ancestorDecimals,
+    //     uint    ancestorChainID,
+
+    //     uint    fromChainID,
+    //     uint    toChainID,
+    //     bytes   fromAccount,
+
+    //     bytes   name,
+    //     bytes   symbol,
+    //     uint8   decimals
+    // )
+    //     public
+    //     onlyOwner
+    //     onlyValidAccount(ancestorAccount)
+    //     onlyValidAccount(fromAccount)
+    // {
+    //     // id should not exist
+    //     require(id == totalTokenPairs + 1, "id is 0");
+    //     require(mapTokenPairInfo[id].toAccount.length > 0, "token Pair exists");
+    //     // check ancestor
+    //     require(ancestorName.length != 0, "ancestorName is null");
+    //     require(ancestorSymbol.length != 0, "ancestorSymbol is null");
+    //     // check pair
+    //     require((fromChainID == chainID) || (toChainID == chainID), "chainId is wrong");
+    //     // check token
+    //     require(name.length != 0, "name is null");
+    //     require(symbol.length != 0, "symbol is null");
+
+    //     // generate a w-token contract instance
+    //     address tokenInst = new MappingToken(string(name), string(symbol), decimals);
+    //     bytes memory toAccount = toBytes(tokenInst);
+
+    //     // create a new record
+    //     mapTokenPairInfo[id] = TokenPairInfo(fromChainID, toChainID, fromAccount, toAccount, false);
+    //     mapAncestorInfo[id] = AncestorInfo(ancestorAccount, ancestorName, ancestorSymbol, ancestorDecimals, ancestorChainID);
+    //     mapTokenInfo[id] = TokenInfo(name, symbol, decimals);
+
+    //     totalTokenPairs = totalTokenPairs + 1;
+
+    //     // fire event
+    //     emit TokenAdd(id, toAccount, name, symbol, decimals);
     // }
+
+    function addTokenPair(
+        uint    id,
+
+        AncestorInfo aInfo,
+
+        uint    fromChainID,
+        uint    toChainID,
+        bytes   fromAccount,
+
+        TokenInfo tokenInfo
+    )
+        public
+        onlyOwner
+        onlyValidAccount(aInfo.ancestorAccount)
+        onlyValidAccount(fromAccount)
+        onChain(fromChainID, toChainID)
+    {
+        // id should not exist
+        require(id == totalTokenPairs + 1, "id is 0");
+        require(mapTokenPairInfo[id].toAccount == address(0), "token Pair exists");
+        // check ancestor
+        require(aInfo.ancestorName.length != 0, "ancestorName is null");
+        require(aInfo.ancestorSymbol.length != 0, "ancestorSymbol is null");
+        // check token
+        require(tokenInfo.name.length != 0, "name is null");
+        require(tokenInfo.symbol.length != 0, "symbol is null");
+
+        // generate a w-token contract instance
+        address tokenInst = new MappingToken(string(tokenInfo.name), string(tokenInfo.symbol), tokenInfo.decimals);
+
+        // create a new record
+        mapTokenPairInfo[id] = TokenPairInfo(fromChainID, toChainID, fromAccount, tokenInst, false);
+        mapAncestorInfo[id] = AncestorInfo(aInfo.ancestorAccount, aInfo.ancestorName, aInfo.ancestorSymbol,
+                                        aInfo.ancestorDecimals, aInfo.ancestorChainID);
+        mapTokenInfo[id] = TokenInfo(tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
+
+        totalTokenPairs = totalTokenPairs + 1;
+
+        // fire event
+        emit TokenAdd(id, tokenInst, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
+    }
 
     /// @notice                      add a supported token
     /// @dev                         add a supported token
     /// @param id                    token pair id start from 1
-    /// @param name                  token name on wanchain mainnet
-    /// @param symbol                token symbol on wanchain mainnet
-    /// @param decimals              token decimals on wanchain mainnet
-    function addToken(
-        uint  id,
-        bytes name,
-        bytes symbol,
-        uint8 decimals
-    )
-        external
-        onlyOwner
-    {
-        require(name.length != 0, "Name is null");
-        require(symbol.length != 0, "Symbol is null");
-        // require(mapTokenInfo[id].name == bytes(0), "Token exists");
-
-        // generate a w-token contract instance
-        address tokenInst = new MappingToken(string(name), string(symbol), decimals);
-
-        // create a new record
-        mapTokenInfo[id] = TokenInfo(tokenInst, name, symbol, decimals);
-
-        // // fire event
-        // emit TokenAddedLogger(tokenOrigAccount, token2WanRatio, minDeposit, withdrawDelayTime, name, symbol, decimals, tokenInst);
-    }
-
-    function addTokenPair(
+    /// @param ancestorAccount       token ancestor address
+    /// @param ancestorName          token ancestor name
+    /// @param ancestorSymbol        token ancestor symbol
+    /// @param ancestorDecimals      token ancestor decimals
+    /// @param ancestorChainID       token ancestor chainID
+    function updateAncestorInfo(
         uint    id,
+
         bytes   ancestorAccount,
         bytes   ancestorName,
         bytes   ancestorSymbol,
         uint8   ancestorDecimals,
-        uint    ancestorChainID,
+        uint    ancestorChainID
+    )
+        public
+        onlyOwner
+        onlyValidAccount(ancestorAccount)
+        onlyValidID(id)
+    {
+        require(ancestorName.length != 0, "ancestorName is null");
+        require(ancestorSymbol.length != 0, "ancestorSymbol is null");
+
+        mapAncestorInfo[id].ancestorAccount = ancestorAccount;
+        mapAncestorInfo[id].ancestorName = ancestorName;
+        mapAncestorInfo[id].ancestorSymbol = ancestorSymbol;
+        mapAncestorInfo[id].ancestorDecimals = ancestorDecimals;
+        mapAncestorInfo[id].ancestorChainID = ancestorChainID;
+    }
+
+    /// @notice                      add a supported token
+    /// @dev                         add a supported token
+    /// @param id                    token pair id start from 1
+    /// @param name                  token name
+    /// @param symbol                token symbol
+    /// @param decimals              token decimals
+    function updateTokenInfo(
+        uint    id,
+
+        bytes   name,
+        bytes   symbol,
+        uint8   decimals
+    )
+        public
+        onlyOwner
+        onlyValidID(id)
+    {
+        require(name.length != 0, "name is null");
+        require(symbol.length != 0, "symbol is null");
+
+        mapTokenInfo[id].name = name;
+        mapTokenInfo[id].symbol = symbol;
+        mapTokenInfo[id].decimals = decimals;
+    }
+
+    /// @notice                      add a supported token
+    /// @dev                         add a supported token
+    /// @param id                    token pair id start from 1
+    /// @param fromChainID           token from chainID
+    /// @param toChainID             token to chainID
+    /// @param fromAccount           token from address
+    function updateTokenPair(
+        uint    id,
+
         uint    fromChainID,
         uint    toChainID,
-        bytes   fromAccount,
-        bytes   toAccount
+        bytes   fromAccount
+    )
+        public
+        onlyOwner
+        onlyValidAccount(fromAccount)
+        onlyValidID(id)
+        onChain(fromChainID, toChainID)
+    {
+        mapTokenPairInfo[id].fromChainID = fromChainID;
+        mapTokenPairInfo[id].toChainID = toChainID;
+        mapTokenPairInfo[id].fromAccount = fromAccount;
+    }
+
+    function mintToken(
+        uint    id,
+        address to,
+        uint    value
+    )
+        public
+        onlyAdmin
+        onlyValidID(id)
+        onlyMeaningfulValue(value)
+    {
+        address instance = mapTokenPairInfo[id].toAccount;
+        IMappingToken(instance).mint(to, value);
+    }
+
+    function burnToken(
+        uint    id,
+        uint    value
+    )
+        public
+        onlyAdmin
+        onlyValidID(id)
+        onlyMeaningfulValue(value)
+    {
+        address instance = mapTokenPairInfo[id].toAccount;
+        IMappingToken(instance).burn(msg.sender, value);
+    }
+
+    function setFeeRatio(
+        uint fromChainID,
+        uint toChainID,
+        uint feeRatio
+    )
+        public
+        onlyOwner
+        onChain(fromChainID, toChainID)
+    {
+        if (fromChainID == chainID) {
+            mapToFeeRatio[toChainID] = feeRatio;
+        } else {
+            mapFromFeeRatio[fromChainID] = feeRatio;
+        }
+    }
+
+    function getFeeRatio(
+        uint fromChainID,
+        uint toChainID
+    )
+        public
+        onlyOwner
+        returns (uint)
+    {
+        if (fromChainID == chainID) {
+            return mapToFeeRatio[toChainID];
+        } else {
+            return mapFromFeeRatio[fromChainID];
+        }
+    }
+
+    function addAdmin(
+        address admin
     )
         public
         onlyOwner
     {
-        require(mapTokenPairInfo[id].id == uint(0), "Token Pair exists");
-        // require(mapTokenPairInfo[id].id == uint(0), "aa");
+        mapAdmin[admin] = true;
     }
 
-    // /// @notice                      remove a supported token
-    // /// @dev                         remove a supported token
-    // /// @param tokenOrigAccount      token account of original chain
-    // function removeToken(bytes tokenOrigAccount)
-    //     external
-    //     onlyOwner
-    //     onlyValidAccount(tokenOrigAccount)
-    // {
-    //     require(mapTokenInfo[tokenOrigAccount].tokenWanAddr != address(0), "Token doesn't exist");
-    //     delete mapTokenInfo[tokenOrigAccount];
-    //     emit TokenRemovedLogger(tokenOrigAccount);
-    // }
-
-    // /// @notice                      update a supported token
-    // /// @dev                         update a supported token
-    // /// @param tokenOrigAccount      token account of original chain
-    // /// @param token2WanRatio        1 token valuated in wan coins, the excharge rate is token2WanRatio / DEFAULT_PRECISE
-    // /// @param minDeposit            the minimum deposit for a valid storeman group
-    // /// @param withdrawDelayTime     the delay time for withdrawing deposit after storeman group applied un-registration
-    // /// @param name                  token name on wanchain mainnet
-    // /// @param symbol                token symbol on wanchain mainnet
-    // /// @param decimals              token decimals on wanchain mainnet
-    // /// @param tokenWanAddr          a wanchain address of supported ERC20 token
-    // function updateToken(
-    //     bytes tokenOrigAccount,
-    //     uint  token2WanRatio,
-    //     uint  minDeposit,
-    //     uint  withdrawDelayTime,
-    //     bytes name,
-    //     bytes symbol,
-    //     uint8 decimals,
-    //     address tokenWanAddr
-    // )
-    //     external
-    //     onlyOwner
-    //     onlyValidAccount(tokenOrigAccount)
-    // {
-    //     require(token2WanRatio > 0, "Ratio is null");
-    //     require(minDeposit >= MIN_DEPOSIT, "Deposit amount is not enough");
-    //     require(withdrawDelayTime >= MIN_WITHDRAW_WINDOW, "Delay time for withdraw is too short");
-    //     require(name.length != 0, "Name is null");
-    //     require(symbol.length != 0, "Symbol is null");
-    //     require(tokenWanAddr != address(0), "Token address on Wanchain is null");
-
-    //     // create a new record
-    //     mapTokenInfo[tokenOrigAccount] = TokenInfo(name, symbol, decimals,
-    //                                                tokenWanAddr, token2WanRatio, minDeposit, withdrawDelayTime);
-
-    //     // fire event
-    //     emit TokenUpdatedLogger(tokenOrigAccount, token2WanRatio, minDeposit, withdrawDelayTime, name, symbol, decimals, tokenWanAddr);
-    // }
-
-    // /// @notice                         get a supported token info
-    // /// @dev                            get a supported token info
-    // /// @param tokenOrigAccount         token account of original chain
-    // /// @return name                    token name on wanchain mainnet
-    // /// @return symbol                  token symbol on wanchain mainnet
-    // /// @return decimals                token decimals on wanchain mainnet
-    // /// @return tokenWanAddr            a wanchain address of supported ERC20 token
-    // /// @return token2WanRatio          1 token valuated in wan coins, the excharge rate is token2WanRatio / DEFAULT_PRECISE
-    // /// @return minDeposit              the minimum deposit for a valid storeman group
-    // /// @return withdrawDelayTime       the delay time for withdrawing deposit after storeman group applied un-registration
-    // /// @return DEFAULT_PRECISE         const value
-    // function getTokenInfo(bytes tokenOrigAccount)
-    //     external
-    //     view
-    //     onlyValidAccount(tokenOrigAccount)
-    //     returns(bytes, bytes, uint8, address, uint, uint, uint, uint)
-    // {
-    //     TokenInfo storage token = mapTokenInfo[tokenOrigAccount];
-    //     return (token.name, token.symbol, token.decimals, token.tokenWanAddr,
-    //             token.token2WanRatio, token.minDeposit, token.withdrawDelayTime, DEFAULT_PRECISE);
-    // }
-
-    // /// @notice                      mint token for a supported token
-    // /// @dev                         mint token for a supported token
-    // /// @param tokenOrigAccount      token account of original chain
-    // /// @param recipient             account minted token for
-    // /// @param value                 minted token amount
-    // function mintToken(bytes tokenOrigAccount, address recipient, uint value)
-    //     external
-    //     onlyHTLC
-    //     onlyValidAccount(tokenOrigAccount)
-    //     onlyMeaningfulValue(value)
-    // {
-    //     address instance = mapTokenInfo[tokenOrigAccount].tokenWanAddr;
-
-    //     // needs to pass recipient address
-    //     IWanToken(instance).mint(recipient, value);
-    // }
-
-    // /// @notice                      burn token in HTLC for a supported token
-    // /// @dev                         burn token in HTLC for a supported token
-    // /// @param tokenOrigAccount      token account of original chain
-    // /// @param value                 burned token amount
-    // function burnToken(bytes tokenOrigAccount, uint value)
-    //     external
-    //     onlyHTLC
-    //     onlyValidAccount(tokenOrigAccount)
-    //     onlyMeaningfulValue(value)
-    // {
-    //     address instance = mapTokenInfo[tokenOrigAccount].tokenWanAddr;
-    //     IWanToken(instance).burn(htlcAddr, value);
-    // }
-
-    // /// @notice                      set HTLC address
-    // /// @dev                         set HTLC address
-    // /// @param addr                  set HTLCProxy contract address
-    // function setHtlcAddr(address addr)
-    //     external
-    //     onlyOwner
-    // {
-    //     require(addr != address(0), "HTLC address is null");
-    //     htlcAddr = addr;
-    // }
+    function removeAdmin(
+        address admin
+    )
+        public
+        onlyOwner
+    {
+        delete mapAdmin[admin];
+    }
 }

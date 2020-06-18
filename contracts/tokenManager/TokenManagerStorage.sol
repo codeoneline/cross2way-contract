@@ -25,11 +25,41 @@
 //
 
 pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
 
 contract TokenManagerStorage is BasicStorage {
+    /************************************************************
+     **
+     ** STRUCTURE DEFINATIONS
+     **
+     ************************************************************/
+
+    /// token info
+    struct TokenInfo {
+        bytes              name;                /// token name on wanchain mainnet
+        bytes              symbol;              /// token symbol on wanchain mainnet
+        uint8              decimals;            /// token decimals on wanchain mainnet
+    }
+
+    /// infomation for a coin crossing a chain from a chain
+    struct AncestorInfo {
+      bytes   ancestorAccount;        /// coin's the most primitive address
+      bytes   ancestorName;           /// coin's the most primitive name
+      bytes   ancestorSymbol;         /// coin's the most primitive symbol
+      uint8   ancestorDecimals;       /// coin's the most primitive decimals
+      uint    ancestorChainID;        /// coin's the most primitive chainID
+    }
+
+    struct TokenPairInfo {
+      uint    fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
+      uint    toChainID;              /// same as before
+      bytes   fromAccount;            /// from address
+      address   toAccount;              /// to address
+
+      bool    isDelete;               /// whether been deleted
+    }
+
     /************************************************************
      **
      ** VARIABLES
@@ -45,38 +75,18 @@ contract TokenManagerStorage is BasicStorage {
 
     /// total amount of TokenPair instance
     uint public totalTokenPairs = 0;
-    /// chainID
+    /// chainID, now is wan chain's id
     uint public constant chainID = 5718350;
-    /// a map from origin chain token account to registered-token information
-    mapping(uint => TokenInfo) public mapTokenInfo;
-
     /// only HTLC contract address can mint and burn token
-    mapping(address => bool) internal mapAdmin;
+    mapping(address => bool) public mapAdmin;
 
-    struct TokenInfo {
-        address            tokenAddr;        /// a wanchain address of supported token
-        bytes              name;                /// token name on wanchain mainnet
-        bytes              symbol;              /// token symbol on wanchain mainnet
-        uint8              decimals;            /// token decimals on wanchain mainnet
-    }
+    /// a map from a sequence ID to token pair
+    mapping(uint => TokenInfo) public mapTokenInfo;
+    mapping(uint => AncestorInfo) public mapAncestorInfo;
+    mapping(uint => TokenPairInfo) public mapTokenPairInfo;
 
-    /// infomation for a coin crossing a chain from a chain
-    struct TokenPairInfo {
-      uint    id;                     /// start from 1, step 1
-
-      bytes   ancestorAccount;        /// coin's the most primitive address
-      bytes   ancestorName;           /// coin's the most primitive name
-      bytes   ancestorSymbol;         /// coin's the most primitive symbol
-      uint8   ancestorDecimals;       /// coin's the most primitive decimals
-      uint    ancestorChainID;        /// coin's the most primitive chainID
-
-      uint    fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
-      uint    toChainID;              /// same as before
-      bytes   fromAccount;            /// from address
-      bytes   toAccount;              /// to address
-      bool    isDelete;               /// whether been deleted
-    }
-
-    /// a map from a sequence ID to token paire
-    mapping(uint => TokenPairInfo) internal mapTokenPairInfo;
+    /// from this chain to Other chain fee ratio
+    mapping(uint => uint) public mapToFeeRatio;
+    /// from Other chain to this chain fee ratio
+    mapping(uint => uint) public mapFromFeeRatio;
 }
