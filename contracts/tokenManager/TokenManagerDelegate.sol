@@ -99,69 +99,14 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
             b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
     }
 
-    // /// @notice                      add a supported token
-    // /// @dev                         add a supported token
-    // /// @param id                    token pair id start from 1
-    // /// @param ancestorAccount       token ancestor address
-    // /// @param ancestorName          token ancestor name
-    // /// @param ancestorSymbol        token ancestor symbol
-    // /// @param ancestorDecimals      token ancestor decimals
-    // /// @param ancestorChainID       token ancestor chainID
-    // /// @param fromChainID           token from chainID
-    // /// @param toChainID             token to chainID
-    // /// @param fromAccount           token from address
-    // /// @param name                  token name
-    // /// @param symbol                token symbol
-    // /// @param decimals              token decimals
-    // function addTokenPair(
-    //     uint    id,
-
-    //     bytes   ancestorAccount,
-    //     bytes   ancestorName,
-    //     bytes   ancestorSymbol,
-    //     uint8   ancestorDecimals,
-    //     uint    ancestorChainID,
-
-    //     uint    fromChainID,
-    //     uint    toChainID,
-    //     bytes   fromAccount,
-
-    //     bytes   name,
-    //     bytes   symbol,
-    //     uint8   decimals
-    // )
-    //     public
-    //     onlyOwner
-    //     onlyValidAccount(ancestorAccount)
-    //     onlyValidAccount(fromAccount)
-    // {
-    //     // id should not exist
-    //     require(id == totalTokenPairs + 1, "id is 0");
-    //     require(mapTokenPairInfo[id].toAccount.length > 0, "token Pair exists");
-    //     // check ancestor
-    //     require(ancestorName.length != 0, "ancestorName is null");
-    //     require(ancestorSymbol.length != 0, "ancestorSymbol is null");
-    //     // check pair
-    //     require((fromChainID == chainID) || (toChainID == chainID), "chainId is wrong");
-    //     // check token
-    //     require(name.length != 0, "name is null");
-    //     require(symbol.length != 0, "symbol is null");
-
-    //     // generate a w-token contract instance
-    //     address tokenInst = new MappingToken(string(name), string(symbol), decimals);
-    //     bytes memory toAccount = toBytes(tokenInst);
-
-    //     // create a new record
-    //     mapTokenPairInfo[id] = TokenPairInfo(fromChainID, toChainID, fromAccount, toAccount, false);
-    //     mapAncestorInfo[id] = AncestorInfo(ancestorAccount, ancestorName, ancestorSymbol, ancestorDecimals, ancestorChainID);
-    //     mapTokenInfo[id] = TokenInfo(name, symbol, decimals);
-
-    //     totalTokenPairs = totalTokenPairs + 1;
-
-    //     // fire event
-    //     emit TokenAdd(id, toAccount, name, symbol, decimals);
-    // }
-
+    /// @notice                      add a supported token
+    /// @dev                         add a supported token
+    /// @param id                    token pair id start from 1
+    /// @param aInfo                 token ancestor info
+    /// @param fromChainID           token from chainID
+    /// @param toChainID             token to chainID
+    /// @param fromAccount           token from address
+    /// @param tokenInfo             token name symbol and decimals
     function addTokenPair(
         uint    id,
 

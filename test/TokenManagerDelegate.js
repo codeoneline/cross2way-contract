@@ -1,15 +1,7 @@
 const TokenManagerDelegate = artifacts.require('TokenManagerDelegate');
 const MappingToken = artifacts.require('MappingToken');
 const assert = require('assert');
-
-async function sendAndGetReason(obj, funcName, args, options) {
-  try {
-    await obj[funcName](...args, options);
-  } catch (e) {
-    return e.reason;
-  }
-  return "";
-}
+const { sendAndGetReason } = require("./helper/helper");
 
 contract('TokenManagerDelegate', (accounts) => {
   const [owner, admin, other] = accounts;
@@ -47,14 +39,12 @@ contract('TokenManagerDelegate', (accounts) => {
     [tokenName, tokenSymbol, asciiDecimals]];
 
   before("init", async () => {
-    // const a = await TokenManagerDelegate.deployed();
-    // const n = await new TokenManagerDelegate();
     tokenManagerDelegate = await TokenManagerDelegate.deployed();
     console.log(`tokenManagerDelegate = ${tokenManagerDelegate.address}`);
   })
 
   describe('normal', () => {
-    it.only('good complex example', async function() {
+    it('good token manager example', async function() {
       let totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
       funcMemberParam[0] = totalTokenPairs + 1;
       await tokenManagerDelegate.addTokenPair(...funcMemberParam, {from: owner});
