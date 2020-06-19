@@ -25,8 +25,13 @@
 //
 
 pragma solidity ^0.4.24;
+import '../components/StandardToken.sol';
 
 interface IMappingToken {
+    function name() external view returns (string);
+    function symbol() external view returns (string);
+    function decimals() external view returns (uint8);
     function mint(address, uint) external;
     function burn(address, uint) external;
+    function update(string, string) external;
 }

@@ -52,12 +52,12 @@ contract TokenManagerStorage is BasicStorage {
     }
 
     struct TokenPairInfo {
-      uint    fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
-      uint    toChainID;              /// same as before
-      bytes   fromAccount;            /// from address
+      uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
+      uint      toChainID;              /// same as before
+      bytes     fromAccount;            /// from address
       address   toAccount;              /// to address
 
-      bool    isDelete;               /// whether been deleted
+      bool      isDelete;               /// whether been deleted
     }
 
     /************************************************************

@@ -314,6 +314,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         uint toChainID
     )
         public
+        view
         onlyOwner
         returns (uint)
     {
@@ -340,5 +341,35 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         onlyOwner
     {
         delete mapAdmin[admin];
+    }
+
+    function getTokenPairInfo(
+        uint id
+    )
+        public
+        view
+        returns (uint fromChainID, uint toChainID, bytes fromAccount, address toAccount, bool isDelete)
+    {
+        fromChainID = mapTokenPairInfo[id].fromChainID;
+        toChainID = mapTokenPairInfo[id].toChainID;
+        fromAccount = mapTokenPairInfo[id].fromAccount;
+        toAccount = mapTokenPairInfo[id].toAccount;
+        isDelete = mapTokenPairInfo[id].isDelete;
+    }
+
+    function getTokenInfo(uint id) public view returns (address addr, string name, string symbol, uint8 decimals) {
+        address instance = mapTokenPairInfo[id].toAccount;
+        name = IMappingToken(instance).name();
+        symbol = IMappingToken(instance).symbol();
+        decimals = IMappingToken(instance).decimals();
+        addr = instance;
+    }
+
+    function getAncestorInfo(uint id) public view returns (bytes account, bytes name, bytes symbol, uint8 decimals, uint chainId) {
+        account = mapAncestorInfo[id].ancestorAccount;
+        name = mapAncestorInfo[id].ancestorName;
+        symbol = mapAncestorInfo[id].ancestorSymbol;
+        decimals = mapAncestorInfo[id].ancestorDecimals;
+        chainId = mapAncestorInfo[id].ancestorChainID;
     }
 }
