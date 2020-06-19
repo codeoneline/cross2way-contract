@@ -13,7 +13,13 @@ contract OracleDelegate is OracleStorage, Owned {
   /// @dev update price
   /// @param keys tokenPair keys
   /// @param prices token price
-  function updatePrice(bytes[] keys, uint[] prices) public {
+  function updatePrice(
+    bytes[] keys,
+    uint[] prices
+  )
+    public
+    onlyOwner
+  {
     require(keys.length == prices.length, "length not same");
 
     for (uint256 i = 0; i < keys.length; i++) {
