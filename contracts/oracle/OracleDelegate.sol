@@ -9,6 +9,16 @@ import "../components/Owned.sol";
 import "./OracleStorage.sol";
 
 contract OracleDelegate is OracleStorage, Owned {
+  /**
+    *
+    * MODIFIERS
+    *
+    */
+  modifier onlyWhitelist() {
+        require(mapWhitelist[msg.sender], "Not in whitelist");
+        _;
+  }
+
   /// @notice update price
   /// @dev update price
   /// @param keys tokenPair keys
@@ -18,7 +28,7 @@ contract OracleDelegate is OracleStorage, Owned {
     uint[] prices
   )
     public
-    onlyOwner
+    onlyWhitelist
   {
     require(keys.length == prices.length, "length not same");
 
@@ -35,6 +45,26 @@ contract OracleDelegate is OracleStorage, Owned {
     values = new uint[](keys.length);
     for(uint256 i = 0; i < keys.length; i++) {
         values[i] = mapPrices[keccak256(keys[i])];
+    }
+  }
+
+  function addWhitelist(
+    address a
+  )
+    public
+    onlyOwner
+  {
+    mapWhitelist[a] = true;
+  }
+
+  function removeWhitelist(
+    address a
+  )
+    public
+    onlyOwner
+  {
+    if (mapWhitelist[a]) {
+      delete mapWhitelist[a];
     }
   }
 }
