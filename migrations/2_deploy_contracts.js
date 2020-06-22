@@ -61,5 +61,6 @@ module.exports = async (deployer, network, accounts) => {
   // await delegate.mintToken(1, other, 100, {from: admin});
   // const value = web3.utils.toBN(await oracleDelegate.getValue(tokenSymbol)).toNumber();
 
-  // await oracleDelegate.updatePrice([tokenSymbol], [v], { from: white });
+  // await oracleDelegate.addWhitelist(accounts[3]);
+  // await oracleDelegate.updatePrice([tokenSymbol], [v], { from: accounts[3] });
 }

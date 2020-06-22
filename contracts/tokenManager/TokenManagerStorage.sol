@@ -60,6 +60,21 @@ contract TokenManagerStorage is BasicStorage {
       bool      isDelete;               /// whether been deleted
     }
 
+    /**
+     *
+     * EVENTS
+     *
+     */
+     event TokenAdd(uint id, address toAccount, bytes name, bytes symbol, uint8 decimals);
+     event UpdateAncestorInfo(uint id, bytes ancestorAccount, bytes ancestorName, bytes ancestorSymbol, uint ancestorChainID);
+     event UpdateTokenPair(uint id, uint fromChainID, uint toChainID, bytes fromAccount);
+     event RemoveTokenPair(uint id);
+     event MintToken(uint id, address to, uint value);
+     event BurnToken(uint id, uint value);
+     event SetFeeRatio(uint fromChainID, uint toChainID, uint feeRatio);
+     event AddAdmin(address admin);
+     event RemoveAdmin(address admin);
+
     /************************************************************
      **
      ** VARIABLES

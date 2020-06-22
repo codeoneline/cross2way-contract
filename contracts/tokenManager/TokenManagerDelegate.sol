@@ -39,13 +39,6 @@ import "./IMappingToken.sol";
 contract TokenManagerDelegate is TokenManagerStorage, Owned {
     /**
      *
-     * EVENTS
-     *
-     */
-     event TokenAdd(uint id, address toAccount, bytes name, bytes symbol, uint8 decimals);
-
-    /**
-     *
      * MODIFIERS
      *
      */
