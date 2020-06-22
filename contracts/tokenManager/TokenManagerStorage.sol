@@ -51,11 +51,16 @@ contract TokenManagerStorage is BasicStorage {
       uint    ancestorChainID;        /// coin's the most primitive chainID
     }
 
+    struct ChainAccount {
+      uint chainID,
+      bytes account
+    }
+
     struct TokenPairInfo {
       uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
-      uint      toChainID;              /// same as before
       bytes     fromAccount;            /// from address
-      address   toAccount;              /// to address
+      uint      toChainID;              /// same as before
+      address   tokenAddress;           /// 
 
       bool      isDelete;               /// whether been deleted
     }
@@ -90,8 +95,6 @@ contract TokenManagerStorage is BasicStorage {
 
     /// total amount of TokenPair instance
     uint public totalTokenPairs = 0;
-    /// chainID, now is wan chain's id
-    uint public constant chainID = 5718350;
     /// only HTLC contract address can mint and burn token
     mapping(address => bool) public mapAdmin;
 

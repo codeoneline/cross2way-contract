@@ -38,17 +38,17 @@ contract OracleDelegate is OracleStorage, Owned {
   }
 
   function updateDeposit(
-    bytes sg,
+    bytes32 smgID,
     uint amount
   )
     public
     onlyWhitelist
   {
-    mapStoremanGroup[keccak256(sg)] = amount;
+    mapStoremanGroup[smgID] = amount;
   }
 
-  function getDeposit(bytes sg) public view returns (uint) {
-    return mapStoremanGroup[keccak256(sg)];
+  function getDeposit(bytes32 smgID) public view returns (uint) {
+    return mapStoremanGroup[smgID];
   }
 
   function getValue(bytes key) public view returns (uint) {

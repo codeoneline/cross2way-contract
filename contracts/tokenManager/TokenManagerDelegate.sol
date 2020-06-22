@@ -37,6 +37,7 @@ import "./MappingToken.sol";
 import "./IMappingToken.sol";
 
 contract TokenManagerDelegate is TokenManagerStorage, Owned {
+    using SafeMath for uint;
     /**
      *
      * MODIFIERS
@@ -56,12 +57,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
 
     modifier onlyMeaningfulValue(uint value) {
         require(value > 0, "Value is null");
-        _;
-    }
-
-    modifier onChain(uint from, uint to) {
-        require(from != to, "same chain");
-        require((from == chainID) || (to == chainID), "not this chain");
         _;
     }
 
@@ -92,6 +87,17 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
             b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
     }
 
+    function addToken(
+        bytes name,
+        bytes symbol,
+        uint8 decimals
+    )
+        external
+        onlyOwner
+    {
+        return new MappingToken(name, symbol, decimals);
+    }
+
     /// @notice                      add a supported token
     /// @dev                         add a supported token
     /// @param id                    token pair id start from 1
@@ -106,16 +112,14 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         AncestorInfo aInfo,
 
         uint    fromChainID,
-        uint    toChainID,
         bytes   fromAccount,
-
-        TokenInfo tokenInfo
+        uint    toChainID,
+        address tokenAddress,
     )
-        public
+        external
         onlyOwner
         onlyValidAccount(aInfo.ancestorAccount)
         onlyValidAccount(fromAccount)
-        onChain(fromChainID, toChainID)
     {
         // id should not exist
         require(id == totalTokenPairs + 1, "id is 0");
@@ -127,18 +131,15 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         require(tokenInfo.name.length != 0, "name is null");
         require(tokenInfo.symbol.length != 0, "symbol is null");
 
-        // generate a w-token contract instance
-        address tokenInst = new MappingToken(string(tokenInfo.name), string(tokenInfo.symbol), tokenInfo.decimals);
-
         // create a new record
-        mapTokenPairInfo[id] = TokenPairInfo(fromChainID, toChainID, fromAccount, tokenInst, false);
+        mapTokenPairInfo[id] = TokenPairInfo(fromChainID, fromAccount, toChainID, tokenAddress, false);
         mapAncestorInfo[id] = AncestorInfo(aInfo.ancestorAccount, aInfo.ancestorName, aInfo.ancestorSymbol,
-                                        aInfo.ancestorDecimals, aInfo.ancestorChainID);
+                                        aInfo.decimals, aInfo.ancestorChainID);
 
         totalTokenPairs = totalTokenPairs + 1;
 
         // fire event
-        emit TokenAdd(id, tokenInst, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
+        emit TokenAdd(id, tokenAddress, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals);
     }
 
     /// @notice                      add a supported token
@@ -180,18 +181,20 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         uint    id,
 
         uint    fromChainID,
+        bytes   fromAccount,
+
         uint    toChainID,
-        bytes   fromAccount
+        bytes   tokenAddress
     )
         public
         onlyOwner
         onlyValidAccount(fromAccount)
         onlyValidID(id)
-        onChain(fromChainID, toChainID)
     {
         mapTokenPairInfo[id].fromChainID = fromChainID;
-        mapTokenPairInfo[id].toChainID = toChainID;
         mapTokenPairInfo[id].fromAccount = fromAccount;
+        mapTokenPairInfo[id].toChainID = toChainID;
+        mapTokenPairInfo[id].tokenAddress = tokenAddress;
     }
 
     function removeTokenPair(
@@ -212,7 +215,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         public
         onlyAdmin
         onlyValidID(id)
-        onlyMeaningfulValue(value)
     {
         address instance = mapTokenPairInfo[id].toAccount;
         IMappingToken(instance).mint(to, value);
@@ -225,7 +227,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         public
         onlyAdmin
         onlyValidID(id)
-        onlyMeaningfulValue(value)
     {
         address instance = mapTokenPairInfo[id].toAccount;
         IMappingToken(instance).burn(msg.sender, value);
@@ -238,7 +239,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     )
         public
         onlyOwner
-        onChain(fromChainID, toChainID)
     {
         if (fromChainID == chainID) {
             mapToFeeRatio[toChainID] = feeRatio;

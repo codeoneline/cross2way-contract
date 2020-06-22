@@ -58,4 +58,7 @@ contract Owned {
             owner = newOwner;
         }
     }
+
+    // TODO:
+    // renounceOwnership
 }
