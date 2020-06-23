@@ -5,7 +5,7 @@ const { sendAndGetReason } = require("./helper/helper");
 contract('Oracle', (accounts) => {
   const [owner, white, other] = accounts;
   let oracleDelegate = null;
-  console.log(`account = ${JSON.stringify(accounts)}`)
+  console.log("Oracle");
 
   const asciiAncestorAccount = "0x6b175474e89094c44da98b954eedeac495271d0f";
   const asciiAncestorName = "eth dai";

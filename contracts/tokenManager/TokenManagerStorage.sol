@@ -25,6 +25,7 @@
 //
 
 pragma solidity ^0.4.24;
+pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
 
@@ -51,16 +52,11 @@ contract TokenManagerStorage is BasicStorage {
       uint    ancestorChainID;        /// coin's the most primitive chainID
     }
 
-    struct ChainAccount {
-      uint chainID,
-      bytes account
-    }
-
     struct TokenPairInfo {
       uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
       bytes     fromAccount;            /// from address
       uint      toChainID;              /// same as before
-      address   tokenAddress;           /// 
+      address   tokenAddress;           /// to token address
 
       bool      isDelete;               /// whether been deleted
     }
@@ -70,9 +66,10 @@ contract TokenManagerStorage is BasicStorage {
      * EVENTS
      *
      */
-     event TokenAdd(uint id, address toAccount, bytes name, bytes symbol, uint8 decimals);
+     event TokenAdd(address tokenAddress, bytes name, bytes symbol, uint8 decimals);
+     event TokenPairAdd(uint id, uint fromChainID, bytes fromAccount, uint toChainID, address tokenAddress);
      event UpdateAncestorInfo(uint id, bytes ancestorAccount, bytes ancestorName, bytes ancestorSymbol, uint ancestorChainID);
-     event UpdateTokenPair(uint id, uint fromChainID, uint toChainID, bytes fromAccount);
+     event UpdateTokenPair(uint id, uint fromChainID, bytes fromAccount, uint toChainID, address tokenAddress);
      event RemoveTokenPair(uint id);
      event MintToken(uint id, address to, uint value);
      event BurnToken(uint id, uint value);
@@ -102,8 +99,6 @@ contract TokenManagerStorage is BasicStorage {
     mapping(uint => AncestorInfo) public mapAncestorInfo;
     mapping(uint => TokenPairInfo) public mapTokenPairInfo;
 
-    /// from this chain to Other chain fee ratio
-    mapping(uint => uint) public mapToFeeRatio;
-    /// from Other chain to this chain fee ratio
-    mapping(uint => uint) public mapFromFeeRatio;
+    /// from chain to another chain fee ratio
+    mapping(uint => mapping(uint => uint)) public mapFeeRatio;
 }
