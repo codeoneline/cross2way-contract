@@ -48,7 +48,7 @@ contract('TokenManagerDelegate', (accounts) => {
   })
 
   describe('normal', () => {
-    it.only('good token manager example', async function() {
+    it('good token manager example', async function() {
       let totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
       addTokenPairParam[0] = totalTokenPairs + 1;
       await tokenManagerDelegate.addTokenPair(...addTokenPairParam, {from: owner});
@@ -88,26 +88,26 @@ contract('TokenManagerDelegate', (accounts) => {
   describe('addToken', () => {
     const addTokenParam = [tokenName, tokenSymbol, asciiDecimals];
     // onlyOwner
-    it.only('onlyOwner', async function() {
+    it('onlyOwner', async function() {
       const reason = await sendAndGetReason(tokenManagerDelegate, "addToken", addTokenParam, {from: admin});
       assert.equal(reason, "Not owner");
     });
     // require(name.length != 0, "name is null")
-    it.only('name.length != 0', async function() {
+    it('name.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(addTokenParam));
       param[0] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "addToken", param, {from: owner});
       assert.equal(reason, "name is null");
     });
     // require(symbol.length != 0, "symbol is null")
-    it.only('symbol.length != 0', async function() {
+    it('symbol.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(addTokenParam));
       param[1] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "addToken", param, {from: owner});
       assert.equal(reason, "symbol is null");
     });
 
-    it.only('success', async function() {
+    it('success', async function() {
       const param = JSON.parse(JSON.stringify(addTokenParam));
       const reason = await sendAndGetReason(tokenManagerDelegate, "addToken", param, {from: owner});
       assert.equal(reason, "");
@@ -116,11 +116,11 @@ contract('TokenManagerDelegate', (accounts) => {
 
   describe('addTokenPair', () => {
     // onlyOwner
-    it.only('onlyOwner', async function() {
+    it('onlyOwner', async function() {
       const reason = await sendAndGetReason(tokenManagerDelegate, "addTokenPair", addTokenPairParam, {from: admin});
       assert.equal(reason, "Not owner");
     });
-    it.only('account.length != 0', async function() {
+    it('account.length != 0', async function() {
       // onlyValidAccount(aInfo.ancestorAccount)
       const param = JSON.parse(JSON.stringify(addTokenPairParam));
       param[1][0] = await web3.utils.hexToBytes("0x");
@@ -133,7 +133,7 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(reason, "Account is null");
     });
     // require(id == totalTokenPairs + 1, "id is 0")
-    it.only('id == totalTokenPairs + 1', async function() {
+    it('id == totalTokenPairs + 1', async function() {
       const param = JSON.parse(JSON.stringify(addTokenPairParam));
       param[0] = parseInt(await tokenManagerDelegate.totalTokenPairs()) + 2;
       let reason = await sendAndGetReason(tokenManagerDelegate, "addTokenPair", param, {from: owner});
@@ -145,7 +145,7 @@ contract('TokenManagerDelegate', (accounts) => {
     });
 
     // require(aInfo.ancestorName.length != 0, "ancestorName is null")
-    it.only('aInfo.ancestorName.length != 0', async function() {
+    it('aInfo.ancestorName.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(addTokenPairParam));
       param[0] = parseInt(await tokenManagerDelegate.totalTokenPairs()) + 1;
       param[1][1] = await web3.utils.hexToBytes("0x");
@@ -153,7 +153,7 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(reason, "ancestorName is null");
     });
     // require(aInfo.ancestorSymbol.length != 0, "ancestorSymbol is null")
-    it.only('aInfo.ancestorSymbol.length != 0', async function() {
+    it('aInfo.ancestorSymbol.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(addTokenPairParam));
       param[0] = parseInt(await tokenManagerDelegate.totalTokenPairs()) + 1;
       param[1][2] = await web3.utils.hexToBytes("0x");
@@ -162,7 +162,7 @@ contract('TokenManagerDelegate', (accounts) => {
     });
 
     // success
-    it.only('success', async function() {
+    it('success', async function() {
       // const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       // param[2] = await web3.utils.hexToBytes(web3.utils.toHex("WAN WDAI"));
       // const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
@@ -175,41 +175,41 @@ contract('TokenManagerDelegate', (accounts) => {
   describe('updateAncestorInfo', () => {
     const updateAncestorInfoParam = [1, ancestorAccount, ancestorName, ancestorSymbol, asciiFromChainID];
     // onlyOwner
-    it.only('onlyOwner', async function() {
+    it('onlyOwner', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: admin});
       assert.equal(reason, "Not owner");
     });
     // onlyValidID(id)
-    it.only('onlyValidID', async function() {
+    it('onlyValidID', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       param[0] = parseInt(await tokenManagerDelegate.totalTokenPairs()) + 1;
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
       assert.equal(reason, "id not exists");
     });
     // onlyValidAccount(ancestorAccount)
-    it.only('onlyValidAccount', async function() {
+    it('onlyValidAccount', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       param[1] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
       assert.equal(reason, "Account is null");
     });
     // ancestorName.length != 0
-    it.only('ancestorName.length != 0', async function() {
+    it('ancestorName.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       param[2] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
       assert.equal(reason, "ancestorName is null");
     });
     // ancestorSymbol.length != 0
-    it.only('ancestorSymbol.length != 0', async function() {
+    it('ancestorSymbol.length != 0', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       param[3] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
       assert.equal(reason, "ancestorSymbol is null");
     });
     // success
-    it.only('success', async function() {
+    it('success', async function() {
       const param = JSON.parse(JSON.stringify(updateAncestorInfoParam));
       param[2] = await web3.utils.hexToBytes(web3.utils.toHex("WAN WDAI"));
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateAncestorInfo", param, {from: owner});
@@ -225,26 +225,26 @@ contract('TokenManagerDelegate', (accounts) => {
       updateTokenPairParam[4] = token;
     });
     // onlyOwner
-    it.only('onlyOwner', async function() {
+    it('onlyOwner', async function() {
       const param = JSON.parse(JSON.stringify(updateTokenPairParam));
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateTokenPair", param, {from: admin});
       assert.equal(reason, "Not owner");
     });
     // onlyValidID(id)
-    it.only('onlyValidID', async function() {
+    it('onlyValidID', async function() {
       const param = JSON.parse(JSON.stringify(updateTokenPairParam));
       param[0] = parseInt(await tokenManagerDelegate.totalTokenPairs()) + 1;
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateTokenPair", param, {from: owner});
       assert.equal(reason, "id not exists");
     });
     // onlyValidAccount(ancestorAccount)
-    it.only('onlyValidAccount', async function() {
+    it('onlyValidAccount', async function() {
       const param = JSON.parse(JSON.stringify(updateTokenPairParam));
       param[2] = await web3.utils.hexToBytes("0x");
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateTokenPair", param, {from: owner});
       assert.equal(reason, "Account is null");
     });
-    it.only('success', async function() {
+    it('success', async function() {
       const param = JSON.parse(JSON.stringify(updateTokenPairParam));
       param[1] = asciiFromChainID + 1;
       const reason = await sendAndGetReason(tokenManagerDelegate, "updateTokenPair", param, {from: owner});
