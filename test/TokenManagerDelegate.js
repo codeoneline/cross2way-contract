@@ -42,7 +42,7 @@ contract('TokenManagerDelegate', (accounts) => {
     tokenManagerDelegate = await TokenManagerDelegate.deployed();
     console.log(`tokenManagerDelegate = ${tokenManagerDelegate.address}`);
     const receipt = await tokenManagerDelegate.addToken(tokenName, tokenSymbol, asciiDecimals, {from: owner});
-    token = receipt.logs[0].args.tokenAddress;
+    token = receipt.logs[1].args.tokenAddress;
     addTokenPairParam[5] = token;
     console.log(`tokenAddress = ${addTokenPairParam[5]}`);
   })
