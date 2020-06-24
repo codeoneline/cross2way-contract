@@ -138,7 +138,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         onlyValidAccount(fromAccount)
     {
         // id should not exist
-        require(id == totalTokenPairs + 1, "id is 0");
+        require(id == totalTokenPairs.add(1), "id is 0");
         // // check ancestor
         require(aInfo.ancestorName.length != 0, "ancestorName is null");
         require(aInfo.ancestorSymbol.length != 0, "ancestorSymbol is null");
@@ -148,7 +148,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapAncestorInfo[id] = AncestorInfo(aInfo.ancestorAccount, aInfo.ancestorName, aInfo.ancestorSymbol,
                                     aInfo.ancestorDecimals, aInfo.ancestorChainID);
 
-        totalTokenPairs = totalTokenPairs + 1;
+        totalTokenPairs = totalTokenPairs.add(1);
 
         // fire event
         emit TokenPairAdd(id, fromChainID, fromAccount, toChainID, tokenAddress);
@@ -273,7 +273,6 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     )
         public
         view
-        onlyOwner
         returns (uint)
     {
         return mapFeeRatio[fromChainID][toChainID];
