@@ -66,14 +66,36 @@ contract('Oracle', (accounts) => {
     });
 
     it('success', async function() {
-      await oracleDelegate.updatePrice([tokenSymbol, tokenSymbol2], [v, v + 100], {from: white});
-      const values = (await oracleDelegate.getValues([tokenSymbol, tokenSymbol2])).map(i => {return web3.utils.toBN(i).toNumber();});
-      assert.equal(values[0], v);
-      assert.equal(values[1], v + 100);
+      const receipt = await oracleDelegate.updatePrice([web3.utils.hexToBytes(web3.utils.toHex("BTC"))], [100], {from: white});
+      console.log(JSON.stringify(receipt));
+      const value = web3.utils.toBN(await oracleDelegate.getValue(web3.utils.hexToBytes(web3.utils.toHex("BTC")))).toNumber();
+      assert.equal(value, 100);
 
-      await oracleDelegate.updatePrice([tokenSymbol], [v + 200], {from: white});
-      const valueNew = web3.utils.toBN(await oracleDelegate.getValue(tokenSymbol)).toNumber();
-      assert.equal(valueNew, v + 200);
+
+
+      // await oracleDelegate.updatePrice([tokenSymbol, tokenSymbol2], [v, v + 100], {from: white});
+      // const values = (await oracleDelegate.getValues([tokenSymbol, tokenSymbol2])).map(i => {return web3.utils.toBN(i).toNumber();});
+      // assert.equal(values[0], v);
+      // assert.equal(values[1], v + 100);
+
+      // await oracleDelegate.updatePrice([tokenSymbol], [v + 200], {from: white});
+      // const valueNew = web3.utils.toBN(await oracleDelegate.getValue(tokenSymbol)).toNumber();
+      // assert.equal(valueNew, v + 200);
+
+
+
+      // const btcSymbol = web3.utils.hexToBytes(web3.utils.toHex("BTC"));
+      // const btcPrice = '0x' + web3.utils.toBN("10").toString('hex');
+      // const ethSymbol = web3.utils.hexToBytes(web3.utils.toHex("ETH"));
+      // const ethPrice = '0x' + web3.utils.toBN("226258085658000000000").toString('hex');
+      // await oracleDelegate.updatePrice([btcSymbol, ethSymbol], [btcPrice, ethPrice], {from: owner});
+      // const values = (await oracleDelegate.getValues([btcSymbol, ethSymbol])).map(i => {return web3.utils.toBN(i).toNumber();});
+      // assert.equal(values[0], v);
+      // assert.equal(values[1], v + 100);
+
+      // await oracleDelegate.updatePrice([tokenSymbol], [v + 200], {from: white});
+      // const valueNew = web3.utils.toBN(await oracleDelegate.getValue(tokenSymbol)).toNumber();
+      // assert.equal(valueNew, v + 200);
     });
   })
 

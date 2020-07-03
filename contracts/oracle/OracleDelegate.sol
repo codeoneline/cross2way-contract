@@ -1,5 +1,4 @@
 pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
 
 /**
  * Math operations with safety checks
@@ -24,7 +23,7 @@ contract OracleDelegate is OracleStorage, Owned {
   /// @param keys tokenPair keys
   /// @param prices token price
   function updatePrice(
-    bytes[] keys,
+    bytes32[] keys,
     uint[] prices
   )
     public
@@ -33,8 +32,10 @@ contract OracleDelegate is OracleStorage, Owned {
     require(keys.length == prices.length, "length not same");
 
     for (uint256 i = 0; i < keys.length; i++) {
-      mapPrices[keccak256(keys[i])] = prices[i];
+      mapPrices[keys[i]] = prices[i];
     }
+
+    emit UpdatePrice(keys, prices);
   }
 
   function updateDeposit(
@@ -45,23 +46,22 @@ contract OracleDelegate is OracleStorage, Owned {
     onlyWhitelist
   {
     mapStoremanGroup[smgID] = amount;
+
+    emit UpdateDeposit(smgID, amount);
   }
 
   function getDeposit(bytes32 smgID) public view returns (uint) {
     return mapStoremanGroup[smgID];
   }
 
-  function getValue(bytes key) public view returns (uint) {
-    return mapPrices[keccak256(key)];
+  function getValue(bytes32 key) public view returns (uint) {
+    return mapPrices[key];
   }
 
-  // function getValues(bytes[] keys) public view returns (uint values) {
-  //   return mapPrices[keccak256(keys[0])];
-  // }
-  function getValues(bytes[] keys) public view returns (uint[] values) {
+  function getValues(bytes32[] keys) public view returns (uint[] values) {
     values = new uint[](keys.length);
     for(uint256 i = 0; i < keys.length; i++) {
-        values[i] = mapPrices[keccak256(keys[i])];
+        values[i] = mapPrices[keys[i]];
     }
   }
 
@@ -72,6 +72,8 @@ contract OracleDelegate is OracleStorage, Owned {
     onlyOwner
   {
     mapWhitelist[a] = true;
+
+    emit AddWhitelist(a);
   }
 
   function removeWhitelist(
@@ -83,5 +85,6 @@ contract OracleDelegate is OracleStorage, Owned {
     if (mapWhitelist[a]) {
       delete mapWhitelist[a];
     }
+    emit RemoveWhitelist(a);
   }
 }

@@ -1,6 +1,5 @@
 
 pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
 
@@ -10,7 +9,10 @@ contract OracleStorage is BasicStorage {
     * EVENTS
     *
     */
-  event UpdatePrice(bytes[] keys, uint[] prices);
+  event UpdatePrice(bytes32[] keys, uint[] prices);
+  event UpdateDeposit(bytes32 smgID, uint amount);
+  event AddWhitelist(address a);
+  event RemoveWhitelist(address a);
 
   /************************************************************
     **
