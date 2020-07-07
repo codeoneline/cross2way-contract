@@ -1,9 +1,12 @@
 const OracleDelegate = artifacts.require('OracleDelegate');
 const assert = require('assert');
 const { sendAndGetReason } = require("./helper/helper");
+const from = require('../truffle').networks.development.from;
 
 contract('Oracle', (accounts) => {
-  const [owner, white, other] = accounts;
+  const [owner_bk, white_bk, other] = accounts;
+  const owner = from ? from : owner_bk;
+  const white = white_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : white_bk;
   let oracleDelegate = null;
   console.log("Oracle");
 
@@ -67,7 +70,6 @@ contract('Oracle', (accounts) => {
 
     it('success', async function() {
       const receipt = await oracleDelegate.updatePrice([web3.utils.hexToBytes(web3.utils.toHex("BTC"))], [100], {from: white});
-      console.log(JSON.stringify(receipt));
       const value = web3.utils.toBN(await oracleDelegate.getValue(web3.utils.hexToBytes(web3.utils.toHex("BTC")))).toNumber();
       assert.equal(value, 100);
 
@@ -129,7 +131,7 @@ contract('Oracle', (accounts) => {
 
   describe('removeWhitelist', () => {
     it('onlyOwner', async function() {
-      const reason = await sendAndGetReason(oracleDelegate, "removeWhitelist", [white], {from: white});
+      const reason = await sendAndGetReason(oracleDelegate, "removeWhitelist", [other], {from: other});
       assert.equal(reason, "Not owner");
     })
     it('if success, updatePrice will failed', async function() {
@@ -137,6 +139,23 @@ contract('Oracle', (accounts) => {
       let reason = await sendAndGetReason(oracleDelegate, "updatePrice", [[tokenSymbol], [v + 400]], {from: white});
       assert.equal(reason, "Not in whitelist");
     });
+  })
+
+  describe('setStoremanGroupConfig', () => {
+    it.only('onlyOwner', async function() {
+      const reason = await sendAndGetReason(oracleDelegate, "setStoremanGroupConfig", [tokenSymbol,1,11,12,21,22,tokenSymbol,tokenSymbol2,4,5], {from: other});
+      assert.equal(reason, "Not owner");
+    })
+
+    it.only('success', async function() {
+      const reason = await sendAndGetReason(oracleDelegate, "setStoremanGroupConfig", [tokenSymbol,1,11,12,21,22,tokenSymbol,tokenSymbol2,4,5], {from: owner});
+      assert.equal(reason, "");
+      const r = await oracleDelegate.getStoremanGroupConfig(tokenSymbol, 100);
+      console.log(JSON.stringify(r))
+    })
+  })
+
+  describe('getStoremanGroupConfig', () => {
   })
 
 })

@@ -38,6 +38,17 @@ contract OracleDelegate is OracleStorage, Owned {
     emit UpdatePrice(keys, prices);
   }
 
+  function getValue(bytes32 key) public view returns (uint) {
+    return mapPrices[key];
+  }
+
+  function getValues(bytes32[] keys) public view returns (uint[] values) {
+    values = new uint[](keys.length);
+    for(uint256 i = 0; i < keys.length; i++) {
+        values[i] = mapPrices[keys[i]];
+    }
+  }
+
   function updateDeposit(
     bytes32 smgID,
     uint amount
@@ -54,37 +65,71 @@ contract OracleDelegate is OracleStorage, Owned {
     return mapStoremanGroup[smgID];
   }
 
-  function getValue(bytes32 key) public view returns (uint) {
-    return mapPrices[key];
-  }
-
-  function getValues(bytes32[] keys) public view returns (uint[] values) {
-    values = new uint[](keys.length);
-    for(uint256 i = 0; i < keys.length; i++) {
-        values[i] = mapPrices[keys[i]];
-    }
-  }
-
   function addWhitelist(
-    address a
+    address addr
   )
     public
     onlyOwner
   {
-    mapWhitelist[a] = true;
+    mapWhitelist[addr] = true;
 
-    emit AddWhitelist(a);
+    emit AddWhitelist(addr);
   }
 
   function removeWhitelist(
-    address a
+    address addr
   )
     public
     onlyOwner
   {
-    if (mapWhitelist[a]) {
-      delete mapWhitelist[a];
+    if (mapWhitelist[addr]) {
+      delete mapWhitelist[addr];
     }
-    emit RemoveWhitelist(a);
+    emit RemoveWhitelist(addr);
+  }
+
+  function setStoremanGroupConfig(
+    bytes32 id,
+    uint deposit,
+    uint chain1,
+    uint chain2,
+    uint curve1,
+    uint curve2,
+    bytes gpk1,
+    bytes gpk2,
+    uint startTime,
+    uint endTime
+  )
+    external
+    onlyOwner
+  {
+    mapStoremanGroupConfig[id].deposit = deposit;
+    mapStoremanGroupConfig[id].chain1 = chain1;
+    mapStoremanGroupConfig[id].chain2 = chain2;
+    mapStoremanGroupConfig[id].curve1 = curve1;
+    mapStoremanGroupConfig[id].curve2 = curve2;
+    mapStoremanGroupConfig[id].gpk1 = gpk1;
+    mapStoremanGroupConfig[id].gpk2 = gpk2;
+    mapStoremanGroupConfig[id].startTime = startTime;
+    mapStoremanGroupConfig[id].endTime = endTime;
+  }
+
+  function getStoremanGroupConfig(
+    bytes32 id
+  )
+    external
+    view
+    returns(bytes32 groupId, uint deposit, uint chain1, uint chain2, uint curve1, uint curve2,  bytes gpk1, bytes gpk2, uint startTime, uint endTime)
+  {
+    groupId = id;
+    deposit = mapStoremanGroupConfig[id].deposit;
+    chain1 = mapStoremanGroupConfig[id].chain1;
+    chain2 = mapStoremanGroupConfig[id].chain2;
+    curve1 = mapStoremanGroupConfig[id].curve1;
+    curve2 = mapStoremanGroupConfig[id].curve2;
+    gpk1 = mapStoremanGroupConfig[id].gpk1;
+    gpk2 = mapStoremanGroupConfig[id].gpk2;
+    startTime = mapStoremanGroupConfig[id].startTime;
+    endTime = mapStoremanGroupConfig[id].endTime;
   }
 }

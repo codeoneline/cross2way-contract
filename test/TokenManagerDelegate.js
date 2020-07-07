@@ -2,9 +2,12 @@ const TokenManagerDelegate = artifacts.require('TokenManagerDelegate');
 const MappingToken = artifacts.require('MappingToken');
 const assert = require('assert');
 const { lastReceipt, sendAndGetReason } = require("./helper/helper");
+const from = require('../truffle').networks.development.from;
 
 contract('TokenManagerDelegate', (accounts) => {
-  const [owner, admin, other] = accounts;
+  const [owner_bk, admin_bk, other] = accounts;
+  const owner = from ? from : owner_bk;
+  const admin = admin_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : admin_bk;
   let tokenManagerDelegate = null;
   let token = null;
   console.log("TokenManagerDelegate");

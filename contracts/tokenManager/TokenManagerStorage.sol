@@ -98,7 +98,5 @@ contract TokenManagerStorage is BasicStorage {
     /// a map from a sequence ID to token pair
     mapping(uint => AncestorInfo) public mapAncestorInfo;
     mapping(uint => TokenPairInfo) public mapTokenPairInfo;
-
-    /// from chain to another chain fee ratio
-    mapping(uint => mapping(uint => uint)) public mapFeeRatio;
+    mapping(uint => uint) public mapTokenPairIndex;
 }
