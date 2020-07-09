@@ -1,15 +1,15 @@
-let lastReceipt = null;
-async function sendAndGetReason(obj, funcName, args, options) {
+async function sendAndGetReason(objFunc, args, options) {
+  let receipt = null;
   try {
-    lastReceipt = await obj[funcName](...args, options);
+    receipt = await objFunc(...args, options);
   } catch (e) {
-    return e.reason;
+    return {reason: e.reason, receipt: null};
   }
 
-  return "";
+  console.log(JSON.stringify(receipt));
+  return {reason: null, receipt: receipt};
 }
 
 module.exports = {
-  sendAndGetReason,
-  lastReceipt
+  sendAndGetReason
 }

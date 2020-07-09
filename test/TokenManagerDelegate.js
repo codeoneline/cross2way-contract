@@ -1,7 +1,7 @@
 const TokenManagerDelegate = artifacts.require('TokenManagerDelegate');
 const MappingToken = artifacts.require('MappingToken');
 const assert = require('assert');
-const { lastReceipt, sendAndGetReason } = require("./helper/helper");
+const { sendAndGetReason } = require("./helper/helper");
 const from = require('../truffle').networks.development.from;
 
 contract('TokenManagerDelegate', (accounts) => {
@@ -28,13 +28,15 @@ contract('TokenManagerDelegate', (accounts) => {
 
   // convert to bytes
   const ancestorAccount = web3.utils.hexToBytes(asciiAncestorAccount);
-  const ancestorName = web3.utils.hexToBytes(web3.utils.toHex(asciiAncestorName))
-  const ancestorSymbol = web3.utils.hexToBytes(web3.utils.toHex(asciiAncestorSymbol))
+  // const ancestorName = web3.utils.hexToBytes(web3.utils.toHex(asciiAncestorName))
+  // const ancestorSymbol = web3.utils.hexToBytes(web3.utils.toHex(asciiAncestorSymbol))
+  const ancestorName = asciiAncestorName;
+  const ancestorSymbol = asciiAncestorSymbol;
 
   const fromAccount = web3.utils.hexToBytes(asciiFromAccount);
 
-  const tokenName = web3.utils.hexToBytes(web3.utils.toHex(asciiTokenName));
-  const tokenSymbol = web3.utils.hexToBytes(web3.utils.toHex(asciiTokenSymbol));
+  const tokenName = asciiTokenName;
+  const tokenSymbol = asciiTokenSymbol;
 
   const addTokenPairParam = [
     1, [ancestorAccount, ancestorName, 
@@ -51,12 +53,14 @@ contract('TokenManagerDelegate', (accounts) => {
   })
 
   describe('normal', () => {
-    it('good token manager example', async function() {
+    it.only('good token manager example', async function() {
       let totalTokenPairs = parseInt(await tokenManagerDelegate.totalTokenPairs());
       addTokenPairParam[0] = totalTokenPairs + 1;
       await tokenManagerDelegate.addTokenPair(...addTokenPairParam, {from: owner});
-      await tokenManagerDelegate.setFeeRatio(asciiFromChainID, asciiToChainID, 100, {from: owner});
-      await tokenManagerDelegate.setFeeRatio(asciiToChainID, asciiFromChainID, 90, {from: owner});
+      addTokenPairParam[0] = totalTokenPairs + 2;
+      await tokenManagerDelegate.addTokenPair(...addTokenPairParam, {from: owner});
+      addTokenPairParam[0] = totalTokenPairs + 3;
+      await tokenManagerDelegate.addTokenPair(...addTokenPairParam, {from: owner});
       await tokenManagerDelegate.addAdmin(admin, {from: owner});
       await tokenManagerDelegate.mintToken(addTokenPairParam[0], other, 100, {from: admin});
 
@@ -68,6 +72,15 @@ contract('TokenManagerDelegate', (accounts) => {
 
       assert.equal(web3.utils.toBN(await token.balanceOf(admin)).toNumber(), 60);
       assert.equal(web3.utils.toBN(await token.balanceOf(other)).toNumber(), 20);
+
+      const tokenPairInfo2 = await tokenManagerDelegate.getTokenPairInfo(1);
+      console.log(JSON.stringify(tokenPairInfo2));
+      const tokenInfo = await tokenManagerDelegate.getTokenInfo(1);
+      console.log(JSON.stringify(tokenInfo));
+      const ancestorInfo = await tokenManagerDelegate.getAncestorInfo(1);
+      console.log(JSON.stringify(ancestorInfo));
+      const tokenPairs = await tokenManagerDelegate.getTokenPairs();
+      console.log(JSON.stringify(tokenPairs));
     });
   })
 
@@ -221,7 +234,7 @@ contract('TokenManagerDelegate', (accounts) => {
       // check log
     });
   })
-
+  
   describe('updateTokenPair', () => {
     const updateTokenPairParam = [1, asciiFromChainID, fromAccount, asciiToChainID, null];
     beforeEach(function() {

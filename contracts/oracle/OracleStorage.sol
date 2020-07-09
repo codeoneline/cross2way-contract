@@ -10,15 +10,14 @@ contract OracleStorage is BasicStorage {
     **
     ************************************************************/
   struct StoremanGroupConfig {
-    uint  deposit;
-    uint  chain1;
-    uint  chain2;
-    uint  curve1;
-    uint  curve2;
-    bytes gpk1;
-    bytes gpk2;
-    uint  startTime;
-    uint  endTime;
+    uint    deposit;
+    uint8   status;
+    uint[2] chain;
+    uint[2] curve;
+    bytes   gpk1;
+    bytes   gpk2;
+    uint    startTime;
+    uint    endTime;
   }
   /**
     *
@@ -38,9 +37,9 @@ contract OracleStorage is BasicStorage {
   // symbol -> price
   mapping(bytes32 => uint) public mapPrices;
   // smgId -> amount
-  mapping(bytes32 => uint) public mapStoremanGroup;
+  mapping(bytes32 => uint) public mapStoremanGroupAmount;
   // smgId -> StoremanGroupConfig
-  mapping(bytes32 => StoremanGroupConfig) public mapStoremanGroupConfig
+  mapping(bytes32 => StoremanGroupConfig) public mapStoremanGroupConfig;
 
   mapping(address => bool) public mapWhitelist;
 }

@@ -26,7 +26,7 @@ contract OracleDelegate is OracleStorage, Owned {
     bytes32[] keys,
     uint[] prices
   )
-    public
+    external
     onlyWhitelist
   {
     require(keys.length == prices.length, "length not same");
@@ -38,11 +38,11 @@ contract OracleDelegate is OracleStorage, Owned {
     emit UpdatePrice(keys, prices);
   }
 
-  function getValue(bytes32 key) public view returns (uint) {
+  function getValue(bytes32 key) external view returns (uint) {
     return mapPrices[key];
   }
 
-  function getValues(bytes32[] keys) public view returns (uint[] values) {
+  function getValues(bytes32[] keys) external view returns (uint[] values) {
     values = new uint[](keys.length);
     for(uint256 i = 0; i < keys.length; i++) {
         values[i] = mapPrices[keys[i]];
@@ -53,22 +53,22 @@ contract OracleDelegate is OracleStorage, Owned {
     bytes32 smgID,
     uint amount
   )
-    public
+    external
     onlyWhitelist
   {
-    mapStoremanGroup[smgID] = amount;
+    mapStoremanGroupAmount[smgID] = amount;
 
     emit UpdateDeposit(smgID, amount);
   }
 
-  function getDeposit(bytes32 smgID) public view returns (uint) {
-    return mapStoremanGroup[smgID];
+  function getDeposit(bytes32 smgID) external view returns (uint) {
+    return mapStoremanGroupAmount[smgID];
   }
 
   function addWhitelist(
     address addr
   )
-    public
+    external
     onlyOwner
   {
     mapWhitelist[addr] = true;
@@ -79,7 +79,7 @@ contract OracleDelegate is OracleStorage, Owned {
   function removeWhitelist(
     address addr
   )
-    public
+    external
     onlyOwner
   {
     if (mapWhitelist[addr]) {
@@ -88,26 +88,36 @@ contract OracleDelegate is OracleStorage, Owned {
     emit RemoveWhitelist(addr);
   }
 
-  function setStoremanGroupConfig(
+  function setStoremanGroupStatus(
     bytes32 id,
-    uint deposit,
-    uint chain1,
-    uint chain2,
-    uint curve1,
-    uint curve2,
-    bytes gpk1,
-    bytes gpk2,
-    uint startTime,
-    uint endTime
+    uint8  status
   )
     external
     onlyOwner
   {
-    mapStoremanGroupConfig[id].deposit = deposit;
-    mapStoremanGroupConfig[id].chain1 = chain1;
-    mapStoremanGroupConfig[id].chain2 = chain2;
-    mapStoremanGroupConfig[id].curve1 = curve1;
-    mapStoremanGroupConfig[id].curve2 = curve2;
+    mapStoremanGroupConfig[id].status = status;
+  }
+
+  function setStoremanGroupConfig(
+    bytes32 id,
+    uint8   status,
+    uint    deposit,
+    uint[2] chain,
+    uint[2] curve,
+    bytes   gpk1,
+    bytes   gpk2,
+    uint    startTime,
+    uint    endTime
+  )
+    external
+    onlyOwner
+  {
+    mapStoremanGroupAmount[id] = deposit;
+    mapStoremanGroupConfig[id].status = status;
+    mapStoremanGroupConfig[id].chain[0] = chain[0];
+    mapStoremanGroupConfig[id].chain[1] = chain[1];
+    mapStoremanGroupConfig[id].curve[0] = curve[0];
+    mapStoremanGroupConfig[id].curve[1] = curve[1];
     mapStoremanGroupConfig[id].gpk1 = gpk1;
     mapStoremanGroupConfig[id].gpk2 = gpk2;
     mapStoremanGroupConfig[id].startTime = startTime;
@@ -119,14 +129,15 @@ contract OracleDelegate is OracleStorage, Owned {
   )
     external
     view
-    returns(bytes32 groupId, uint deposit, uint chain1, uint chain2, uint curve1, uint curve2,  bytes gpk1, bytes gpk2, uint startTime, uint endTime)
+    returns(bytes32 groupId, uint8 status, uint deposit, uint chain1, uint chain2, uint curve1, uint curve2, bytes gpk1, bytes gpk2, uint startTime, uint endTime)
   {
     groupId = id;
-    deposit = mapStoremanGroupConfig[id].deposit;
-    chain1 = mapStoremanGroupConfig[id].chain1;
-    chain2 = mapStoremanGroupConfig[id].chain2;
-    curve1 = mapStoremanGroupConfig[id].curve1;
-    curve2 = mapStoremanGroupConfig[id].curve2;
+    status = mapStoremanGroupConfig[id].status;
+    deposit = mapStoremanGroupAmount[id];
+    chain1 = mapStoremanGroupConfig[id].chain[0];
+    chain2 = mapStoremanGroupConfig[id].chain[1];
+    curve1 = mapStoremanGroupConfig[id].curve[0];
+    curve2 = mapStoremanGroupConfig[id].curve[1];
     gpk1 = mapStoremanGroupConfig[id].gpk1;
     gpk2 = mapStoremanGroupConfig[id].gpk2;
     startTime = mapStoremanGroupConfig[id].startTime;

@@ -25,7 +25,6 @@
 //
 
 pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
 
@@ -38,23 +37,32 @@ contract TokenManagerStorage is BasicStorage {
 
     /// token info
     struct TokenInfo {
-        bytes              name;                /// token name on wanchain mainnet
-        bytes              symbol;              /// token symbol on wanchain mainnet
+        string              name;                /// token name on wanchain mainnet
+        string              symbol;              /// token symbol on wanchain mainnet
         uint8              decimals;            /// token decimals on wanchain mainnet
     }
 
     /// infomation for a coin crossing a chain from a chain
     struct AncestorInfo {
-      bytes   ancestorAccount;        /// coin's the most primitive address
-      bytes   ancestorName;           /// coin's the most primitive name
-      bytes   ancestorSymbol;         /// coin's the most primitive symbol
+      bytes32   ancestorAccount;        /// coin's the most primitive address
+      string   ancestorName;           /// coin's the most primitive name
+      string   ancestorSymbol;         /// coin's the most primitive symbol
       uint8   ancestorDecimals;       /// coin's the most primitive decimals
       uint    ancestorChainID;        /// coin's the most primitive chainID
     }
 
+    struct TokenPairInfo2 {
+      uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
+      bytes32   fromAccount;            /// from address
+      uint      toChainID;              /// same as before
+      address   tokenAddress;           /// to token address
+
+      bool      isDelete;               /// whether been deleted
+    }
+
     struct TokenPairInfo {
       uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
-      bytes     fromAccount;            /// from address
+      bytes32   fromAccount;            /// from address
       uint      toChainID;              /// same as before
       address   tokenAddress;           /// to token address
 
@@ -66,10 +74,10 @@ contract TokenManagerStorage is BasicStorage {
      * EVENTS
      *
      */
-     event TokenAdd(address tokenAddress, bytes name, bytes symbol, uint8 decimals);
-     event TokenPairAdd(uint id, uint fromChainID, bytes fromAccount, uint toChainID, address tokenAddress);
-     event UpdateAncestorInfo(uint id, bytes ancestorAccount, bytes ancestorName, bytes ancestorSymbol, uint ancestorChainID);
-     event UpdateTokenPair(uint id, uint fromChainID, bytes fromAccount, uint toChainID, address tokenAddress);
+     event TokenAdd(address tokenAddress, string name, string symbol, uint8 decimals);
+     event TokenPairAdd(uint id, uint fromChainID, bytes32 fromAccount, uint toChainID, address tokenAddress);
+     event UpdateAncestorInfo(uint id, bytes32 ancestorAccount, string ancestorName, string ancestorSymbol, uint ancestorChainID);
+     event UpdateTokenPair(uint id, uint fromChainID, bytes32 fromAccount, uint toChainID, address tokenAddress);
      event RemoveTokenPair(uint id);
      event MintToken(uint id, address to, uint value);
      event BurnToken(uint id, uint value);
