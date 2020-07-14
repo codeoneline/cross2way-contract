@@ -24,7 +24,7 @@
 //
 //
 
-pragma solidity ^0.4.24;
+pragma solidity 0.4.26;
 pragma experimental ABIEncoderV2;
 
 /**
@@ -44,14 +44,8 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
      *
      */
 
-    // modifier onlyValidAccount(bytes32 account) {
-    //     require(account.length != 0, "Account is null");
-    //     _;
-    // }
-
     modifier onlyValidID(uint id) {
-        require(mapTokenPairInfo[id].tokenAddress != address(0), "id not exists");
-        require(!(mapTokenPairInfo[id].isDelete), "token deleted");
+        require(mapTokenPairInfo[id].isValid, "token deleted");
         _;
     }
 
@@ -62,31 +56,10 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
 
     /**
     *
-    * PRIVATE
-    *
-    */
-
-    function bytesToBytes32(bytes b, uint offset) private pure returns (bytes32) {
-        bytes32 out;
-
-        for (uint i = 0; i < 32; i++) {
-            out |= bytes32(b[offset + i] & 0xFF) << (i * 8);
-        }
-        return out;
-    }
-
-    function bytes32ToBytes(bytes32 data) private pure returns (bytes) {
-        return abi.encodePacked(data);
-    }
-
-    /**
-    *
     * MANIPULATIONS
     *
     */
 
-    /// @notice If WAN coin is sent to this address, send it back.
-    /// @dev If WAN coin is sent to this address, send it back.
     function() external payable {
         revert("Not support");
     }
@@ -105,7 +78,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
 
         address tokenAddress = new MappingToken(string(name), string(symbol), decimals);
         // fire event
-        emit TokenAdd(tokenAddress, name, symbol, decimals);
+        emit AddToken(tokenAddress, name, symbol, decimals);
     }
 
     function addTokenPair(
@@ -120,15 +93,13 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     )
         public
         onlyOwner
-        // onlyValidAccount(aInfo.ancestorAccount)
-        // onlyValidAccount(fromAccount)
     {
         // check ancestor
         require(bytes(aInfo.ancestorName).length != 0, "ancestorName is null");
         require(bytes(aInfo.ancestorSymbol).length != 0, "ancestorSymbol is null");
 
         // create a new record
-        mapTokenPairInfo[id] = TokenPairInfo(fromChainID, fromAccount, toChainID, tokenAddress, false);
+        mapTokenPairInfo[id] = TokenPairInfo(fromChainID, fromAccount, toChainID, tokenAddress, true);
         mapAncestorInfo[id] = AncestorInfo(aInfo.ancestorAccount, aInfo.ancestorName, aInfo.ancestorSymbol,
                                     aInfo.ancestorDecimals, aInfo.ancestorChainID);
 
@@ -136,7 +107,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapTokenPairIndex[totalTokenPairs] = id;
 
         // fire event
-        emit TokenPairAdd(id, fromChainID, fromAccount, toChainID, tokenAddress);
+        emit AddTokenPair(id, fromChainID, fromAccount, toChainID, tokenAddress);
     }
 
     function updateAncestorInfo(
@@ -147,10 +118,9 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         string   ancestorSymbol,
         uint    ancestorChainID
     )
-        public
+        external
         onlyOwner
         onlyValidID(id)
-        // onlyValidAccount(ancestorAccount)
     {
         require(bytes(ancestorName).length != 0, "ancestorName is null");
         require(bytes(ancestorSymbol).length != 0, "ancestorSymbol is null");
@@ -172,10 +142,9 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         uint     toChainID,
         address  tokenAddress
     )
-        public
+        external
         onlyOwner
         onlyValidID(id)
-        // onlyValidAccount(fromAccount)
     {
         mapTokenPairInfo[id].fromChainID = fromChainID;
         mapTokenPairInfo[id].fromAccount = fromAccount;
@@ -188,11 +157,11 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     function removeTokenPair(
         uint id
     )
-        public
+        external
         onlyOwner
         onlyValidID(id)
     {
-        mapTokenPairInfo[id].isDelete = true;
+        mapTokenPairInfo[id].isValid = false;
 
         emit RemoveTokenPair(id);
     }
@@ -202,7 +171,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         address to,
         uint    value
     )
-        public
+        external
         onlyAdmin
         onlyValidID(id)
     {
@@ -216,7 +185,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         uint    id,
         uint    value
     )
-        public
+        external
         onlyAdmin
         onlyValidID(id)
     {
@@ -229,7 +198,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     function addAdmin(
         address admin
     )
-        public
+        external
         onlyOwner
     {
         mapAdmin[admin] = true;
@@ -240,7 +209,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     function removeAdmin(
         address admin
     )
-        public
+        external
         onlyOwner
     {
         delete mapAdmin[admin];
@@ -251,18 +220,18 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     function getTokenPairInfo(
         uint id
     )
-        public
+        external
         view
-        returns (uint fromChainID, bytes32 fromAccount, uint toChainID, address tokenAddress, bool isDelete)
+        returns (uint fromChainID, bytes32 fromAccount, uint toChainID, address tokenAddress, bool isValid)
     {
         fromChainID = mapTokenPairInfo[id].fromChainID;
         fromAccount = mapTokenPairInfo[id].fromAccount;
         toChainID = mapTokenPairInfo[id].toChainID;
         tokenAddress = mapTokenPairInfo[id].tokenAddress;
-        isDelete = mapTokenPairInfo[id].isDelete;
+        isValid = mapTokenPairInfo[id].isValid;
     }
 
-    function getTokenInfo(uint id) public view returns (address addr, string name, string symbol, uint8 decimals) {
+    function getTokenInfo(uint id) external view returns (address addr, string name, string symbol, uint8 decimals) {
         address instance = mapTokenPairInfo[id].tokenAddress;
         name = IMappingToken(instance).name();
         symbol = IMappingToken(instance).symbol();
@@ -270,49 +239,13 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         addr = instance;
     }
 
-    function getAncestorInfo(uint id) public view returns (bytes32 account, string name, string symbol, uint8 decimals, uint chainId) {
+    function getAncestorInfo(uint id) external view returns (bytes32 account, string name, string symbol, uint8 decimals, uint chainId) {
         account = mapAncestorInfo[id].ancestorAccount;
         name = mapAncestorInfo[id].ancestorName;
         symbol = mapAncestorInfo[id].ancestorSymbol;
         decimals = mapAncestorInfo[id].ancestorDecimals;
         chainId = mapAncestorInfo[id].ancestorChainID;
     }
-
-    // function getTokenPairs()
-    //     external
-    //     view
-    //     returns (uint[] id, uint[] fromChainID, bytes32[] fromAccount, uint[] toChainID, address[] tokenAddress, string[] ancestorSymbol, uint8[] ancestorDecimals)
-    // {
-    //     uint cnt = 0;
-    //     uint i = 0;
-    //     for (; i < totalTokenPairs; i++ ) {
-    //         if (!mapTokenPairInfo[mapTokenPairIndex[i + 1]].isDelete) {
-    //             cnt ++;
-    //         }
-    //     }
-
-    //     id = new uint[](cnt);
-    //     fromChainID = new uint[](cnt);
-    //     fromAccount = new bytes32[](cnt);
-    //     toChainID = new uint[](cnt);
-    //     tokenAddress = new address[](cnt);
-
-    //     ancestorSymbol = new string[](cnt);
-    //     ancestorDecimals = new uint8[](cnt);
-
-    //     for (; i < cnt; i++) {
-    //         uint theId = mapTokenPairIndex[i + 1];
-
-    //         id[i] = theId;
-    //         fromChainID[i] = mapTokenPairInfo[theId].fromChainID;
-    //         fromAccount[i] = mapTokenPairInfo[theId].fromAccount;
-    //         toChainID[i] = mapTokenPairInfo[theId].toChainID;
-    //         tokenAddress[i] = mapTokenPairInfo[theId].tokenAddress;
-
-    //         ancestorSymbol[i] = mapAncestorInfo[theId].ancestorSymbol;
-    //         ancestorDecimals[i] = mapAncestorInfo[theId].ancestorDecimals;
-    //     }
-    // }
 
     function getTokenPairs()
         external
@@ -322,9 +255,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         uint cnt = 0;
         uint i = 0;
         for (; i < totalTokenPairs; i++ ) {
-            if (mapTokenPairIndex[i + 1] > 0) {
-                cnt ++;
-            }
+            cnt ++;
         }
 
         id = new uint[](cnt);
@@ -348,5 +279,58 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
             ancestorSymbol[i] = mapAncestorInfo[theId].ancestorSymbol;
             ancestorDecimals[i] = mapAncestorInfo[theId].ancestorDecimals;
         }
+    }
+
+    function getTokenPairsByChainID(uint chainID1, uint chainID2)
+        external
+        view
+        returns (uint[] id, uint[] fromChainID, bytes32[] fromAccount, uint[] toChainID, address[] tokenAddress, string[] ancestorSymbol, uint8[] ancestorDecimals)
+    {
+        uint cnt = 0;
+        uint i = 0;
+        uint theId = 0;
+        uint[] memory id_valid = new uint[](totalTokenPairs);
+        for (; i < totalTokenPairs; i++ ) {
+            theId = mapTokenPairIndex[i + 1];
+            if (mapTokenPairInfo[theId].isValid) {
+                if ((mapTokenPairInfo[theId].fromChainID == chainID1) && (mapTokenPairInfo[theId].toChainID == chainID2) ||
+                (mapTokenPairInfo[theId].toChainID == chainID1) && (mapTokenPairInfo[theId].fromChainID == chainID2)) {
+                    id_valid[cnt] = theId;
+                    cnt ++;
+                }
+            }
+        }
+
+        id = new uint[](cnt);
+        fromChainID = new uint[](cnt);
+        fromAccount = new bytes32[](cnt);
+        toChainID = new uint[](cnt);
+        tokenAddress = new address[](cnt);
+
+        ancestorSymbol = new string[](cnt);
+        ancestorDecimals = new uint8[](cnt);
+
+        for (i = 0; i < cnt; i++) {
+            theId = id_valid[i];
+
+            id[i] = theId;
+            fromChainID[i] = mapTokenPairInfo[theId].fromChainID;
+            fromAccount[i] = mapTokenPairInfo[theId].fromAccount;
+            toChainID[i] = mapTokenPairInfo[theId].toChainID;
+            tokenAddress[i] = mapTokenPairInfo[theId].tokenAddress;
+
+            ancestorSymbol[i] = mapAncestorInfo[theId].ancestorSymbol;
+            ancestorDecimals[i] = mapAncestorInfo[theId].ancestorDecimals;
+        }
+    }
+
+    function updateToken(uint id, string name, string symbol)
+        external
+        onlyOwner
+    {
+        address instance = mapTokenPairInfo[id].tokenAddress;
+        IMappingToken(instance).update(name, symbol);
+
+        emit UpdateToken(id, name, symbol);
     }
 }

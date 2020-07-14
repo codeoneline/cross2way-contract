@@ -2,20 +2,19 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 8545,
-      network_id: "*",
-      gas: 6000000,
-      gasPrice: 1000000000,
-      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
-    },
-    test: {
-      host: "127.0.0.1",
-      port: 8545,
+      port: 7545,
       network_id: "*",
       gas: 10000000,
-      gasPrice: 1000000000,
-      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
+      gasPrice: 180000000000
     },
+    // test: {
+    //   host: "127.0.0.1",
+    //   port: 8545,
+    //   network_id: "*",
+    //   gas: 10000000,
+    //   gasPrice: 1000000000,
+    //   from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
+    // },
     coverage: {
       host: 'localhost',
       network_id: '*',

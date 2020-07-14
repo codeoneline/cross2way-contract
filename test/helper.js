@@ -11,5 +11,5 @@ async function sendAndGetReason(objFunc, args, options) {
 }
 
 module.exports = {
-  sendAndGetReason
-}
+  sendAndGetReason,
+};
