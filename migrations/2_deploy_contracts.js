@@ -2,6 +2,7 @@ const TokenManagerProxy = artifacts.require('TokenManagerProxy');
 const TokenManagerDelegate = artifacts.require('TokenManagerDelegate');
 const OracleProxy = artifacts.require('OracleProxy');
 const OracleDelegate = artifacts.require('OracleDelegate');
+const StoremanGroupAdmin = artifacts.require('StoremanGroupAdmin');
 
 module.exports = async (deployer, network, accounts) => {
   const [owner, admin, other] = accounts;
@@ -22,4 +23,7 @@ module.exports = async (deployer, network, accounts) => {
   const oracleDelegate = await OracleDelegate.deployed();
   // oracle proxy upgrade to oracle delegate
   await oracleProxy.upgradeTo(oracleDelegate.address);
+
+  await deployer.deploy(StoremanGroupAdmin);
+  await StoremanGroupAdmin.delegated();
 }
