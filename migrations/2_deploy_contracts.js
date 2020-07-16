@@ -25,5 +25,5 @@ module.exports = async (deployer, network, accounts) => {
   await oracleProxy.upgradeTo(oracleDelegate.address);
 
   await deployer.deploy(StoremanGroupAdmin);
-  await StoremanGroupAdmin.delegated();
+  await StoremanGroupAdmin.deployed();
 }
