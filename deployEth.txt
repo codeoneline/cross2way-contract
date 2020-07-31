@@ -32,13 +32,13 @@
 
    Deploying 'TokenManagerProxy'
    -----------------------------
-   > transaction hash:    0xa9b2ac91d13ae90ae5ecdbae3bf904f20e4590f4ce93d6c8664c00c7e580d1df
-   > Blocks: 0            Seconds: 8
-   > contract address:    0xA6f68cEE34a1B6A3625B3e25b299ed8FFCcd6ec2
-   > block number:        96
-   > block timestamp:     1594891112
+   > transaction hash:    0xb8a8495f9aa6e991f5865744716821943853509d7998af8a3375847dcc2e8d6f
+   > Blocks: 1            Seconds: 4
+   > contract address:    0x391dD875cBC5955C151182396604F5e97B00d3f2
+   > block number:        42786
+   > block timestamp:     1595418980
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999999.981032640000000004
+   > balance:             9999999999999999998.778474560000000004
    > gas used:            708833 (0xad0e1)
    > gas price:           20 gwei
    > value sent:          0 ETH
@@ -47,17 +47,17 @@
 
    Deploying 'TokenManagerDelegate'
    --------------------------------
-   > transaction hash:    0x10356867ed851e109f0265285d9af61e4ba25e55d12c8ee4a801599fb32035d6
-   > Blocks: 0            Seconds: 16
-   > contract address:    0x179bAa7Db0B83c83963cF1f5dF89b06d9cE218f4
-   > block number:        97
-   > block timestamp:     1594891122
+   > transaction hash:    0x18cedfa4985fe80c9fd68cc3624fe89f7289986ca5031aeabaf7176865ac9e05
+   > Blocks: 0            Seconds: 8
+   > contract address:    0x795262615D297495Bd0A0FD9Aa36967D4D065213
+   > block number:        42787
+   > block timestamp:     1595418983
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999999.904072340000000004
-   > gas used:            3848015 (0x3ab74f)
+   > balance:             9999999999999999998.702029300000000004
+   > gas used:            3822263 (0x3a52b7)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.0769603 ETH
+   > total cost:          0.07644526 ETH
 
 
    Deploying 'OracleProxy'

@@ -32,13 +32,13 @@
 
    Deploying 'TokenManagerProxy'
    -----------------------------
-   > transaction hash:    0xed2dd01d3eff7bd47b3d20b1b6c93459af490865dd5123a016e6fc893ab98238
+   > transaction hash:    0xadd0366d9f30aaebb16b5f41fe5e77200917c2a6dd1db132d2600429384b43aa
    > Blocks: 0            Seconds: 0
-   > contract address:    0x40a2D2Fc5945d648804722e17515C78D62E60D08
-   > block number:        7209
-   > block timestamp:     1594890713
+   > contract address:    0x675497d541AC9f24F1B75F3f2Ad23B5B4F768Be6
+   > block number:        532840
+   > block timestamp:     1595419099
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             99999998.3493712
+   > balance:             99999961.140503966
    > gas used:            855433 (0xd0d89)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -47,17 +47,17 @@
 
    Deploying 'TokenManagerDelegate'
    --------------------------------
-   > transaction hash:    0xa9c99f0d5d1bf65d2ed8ecda79ffbbae39bedaa49309166ef10f8cb1eed3ec11
+   > transaction hash:    0x56a13c12ec85118af3c828dac667f819ccb52e39306f4b5da735f837a0316e81
    > Blocks: 0            Seconds: 0
-   > contract address:    0xf50734A8CC721Afb3bb4597Bd4D3030ff1a2fdfb
-   > block number:        7210
-   > block timestamp:     1594890714
+   > contract address:    0x71D742a30661832e8F74DD9816072F3060501f3F
+   > block number:        532841
+   > block timestamp:     1595419100
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             99999997.50623626
-   > gas used:            4684083 (0x477933)
+   > balance:             99999960.303296066
+   > gas used:            4651155 (0x46f893)
    > gas price:           180 gwei
    > value sent:          0 ETH
-   > total cost:          0.84313494 ETH
+   > total cost:          0.8372079 ETH
 
 
    Deploying 'OracleProxy'

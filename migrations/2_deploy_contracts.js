@@ -17,20 +17,19 @@ module.exports = async (deployer, network, accounts) => {
   // token manager proxy upgrade to token manager delegate
   await proxy.upgradeTo(delegate.address);
 
-  // deploy oracle proxy
-  // await deployer.deploy(OracleProxy);
-  // const oracleProxy = await OracleProxy.deployed();
-  // // deploy oracle delegate
-  // await deployer.deploy(OracleDelegate);
-  // const oracleDelegate = await OracleDelegate.deployed();
-  // // oracle proxy upgrade to oracle delegate
-  // await oracleProxy.upgradeTo(oracleDelegate.address);
+  await deployer.deploy(OracleProxy);
+  const oracleProxy = await OracleProxy.deployed();
+  // deploy oracle delegate
+  await deployer.deploy(OracleDelegate);
+  const oracleDelegate = await OracleDelegate.deployed();
+  // oracle proxy upgrade to oracle delegate
+  await oracleProxy.upgradeTo(oracleDelegate.address);
 
-  // await deployer.deploy(StoremanGroupAdmin);
-  // await StoremanGroupAdmin.deployed();
+  await deployer.deploy(StoremanGroupAdmin);
+  await StoremanGroupAdmin.deployed();
 
-  // const link = await MappingToken.new('link on eth', 'LINK', 18);
+  // const link = await MappingToken.new('link on eth to os', 'LINK', 18);
   // console.log(`address = ${link.address}`)
-  // const fnx = await MappingToken.new('fnx on wan', 'FNX', 18);
-  // console.log(`address = ${fnx.address}`)
+  const fnx = await MappingToken.new('fnx on wan os', 'FNX', 18);
+  console.log(`address = ${fnx.address}`)
 }
