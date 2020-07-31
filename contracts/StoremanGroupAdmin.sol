@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 contract StoremanGroupAdmin {
   enum GroupStatus {none, initial, curveSeted, failed, selected, ready, unregistered, dismissed}
 
-  event registerStartEvent(bytes32 indexed groupId, uint workStart,uint workDuration, uint registerDuration, bytes32 indexed preGroupId);
+  event StoremanGroupRegisterStartEvent(bytes32 indexed groupId, uint workStart,uint workDuration, uint registerDuration, bytes32 indexed preGroupId);
   event StoremanGroupUnregisterEvent(bytes32 indexed groupId);
 
   event StoremanGroupDismissedLogger(bytes tokenOrigAccount, bytes storemanGroup, uint dismissTime);
@@ -94,7 +94,7 @@ contract StoremanGroupAdmin {
 
     // mapDeposit[groupId].deposit = deposit;
 
-    emit registerStartEvent(groupId, workStart, workDuration, registerDuration, preGroupId);
+    emit StoremanGroupRegisterStartEvent(groupId, workStart, workDuration, registerDuration, preGroupId);
     if(preGroupId != bytes32(0x00)) {
       emit storemanTransferEvent(groupId, preGroupId, oldAddr);
     }
