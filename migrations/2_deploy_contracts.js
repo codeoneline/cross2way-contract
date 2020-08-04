@@ -25,11 +25,11 @@ module.exports = async (deployer, network, accounts) => {
   // oracle proxy upgrade to oracle delegate
   await oracleProxy.upgradeTo(oracleDelegate.address);
 
-  await deployer.deploy(StoremanGroupAdmin);
-  await StoremanGroupAdmin.deployed();
+  // await deployer.deploy(StoremanGroupAdmin);
+  // await StoremanGroupAdmin.deployed();
 
   // const link = await MappingToken.new('link on eth to os', 'LINK', 18);
   // console.log(`address = ${link.address}`)
   const fnx = await MappingToken.new('fnx on wan os', 'FNX', 18);
-  console.log(`address = ${fnx.address}`)
+  console.log(`fnx address = ${fnx.address}`)
 }
