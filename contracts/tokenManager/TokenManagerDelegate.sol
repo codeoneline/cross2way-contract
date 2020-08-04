@@ -348,7 +348,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
     function updateToken(uint id, string name, string symbol)
         external
         onlyOwner
-        onlyValidID(id)
+        onlyExistID(id)
     {
         address instance = mapTokenPairInfo[id].tokenAddress;
         IMappingToken(instance).update(name, symbol);
