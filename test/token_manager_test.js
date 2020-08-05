@@ -320,7 +320,7 @@ contract('TokenManagerDelegate', (accounts) => {
     });
   });
 
-  describe('', () => {
+  describe('updateToken', () => {
     it('onlyExistID', async function() {
       const { tokenManagerDelegate } = await newTokenManager(accounts);
 

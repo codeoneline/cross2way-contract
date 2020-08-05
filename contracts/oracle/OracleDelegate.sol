@@ -19,6 +19,7 @@ contract OracleDelegate is OracleStorage, Owned {
   event SetStoremanGroupStatus(bytes32 indexed id, uint8 status);
   event SetStoremanGroupConfig(bytes32 indexed id, uint8 status, uint deposit, uint[2] chain, uint[2] curve,
     bytes gpk1, bytes gpk2, uint startTime, uint endTime);
+  event SetDebtClean(bytes32 indexed id, bool isDebtClean);
 
   /**
     *
@@ -147,5 +148,27 @@ contract OracleDelegate is OracleStorage, Owned {
     gpk2 = mapStoremanGroupConfig[id].gpk2;
     startTime = mapStoremanGroupConfig[id].startTime;
     endTime = mapStoremanGroupConfig[id].endTime;
+  }
+
+  function setDebtClean(
+    bytes32 storemanGroupId,
+    bool isClean
+  )
+    external
+    onlyAdmin
+  {
+    mapDebtClean[storemanGroupId] = isClean;
+    
+    emit SetDebtClean(storemanGroupId, isClean);
+  }
+
+  function isDebtClean(
+    bytes32 storemanGroupId
+  )
+    external
+    view
+    returns (bool)
+  {
+    return mapDebtClean[storemanGroupId];
   }
 }
