@@ -1,3 +1,5 @@
+jsw@pc:~/code/codeoneline/cross2way-contracts$ npx truffle migrate --network etc179
+
 Compiling your contracts...
 ===========================
 > Everything is up to date, there is nothing to compile.
@@ -16,13 +18,13 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x687d7b8626f5431b7f9140d7b8b257f570fc86045e0b5ff32b4f2c0e7ecd5493
+   > transaction hash:    0x55d200cf7728c7351ab7bb79457217da04dd00ecca82308de920c284f4043410
    > Blocks: 0            Seconds: 0
-   > contract address:    0xA6501f627F29dE0EAc1166f318449215E91a38d8
-   > block number:        42373
-   > block timestamp:     1596513518
+   > contract address:    0xb4969B54Ba85B7f1EBfE03CAee3C44419aF8CdaC
+   > block number:        64709
+   > block timestamp:     1596796356
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999989.525696420000000004
+   > balance:             9999999999999999989.371413440000000004
    > gas used:            197287 (0x302a7)
    > gas price:           20 gwei
    > value sent:          0 ETH
@@ -40,71 +42,87 @@ Starting migrations...
 
    Deploying 'TokenManagerDelegate'
    --------------------------------
-   > transaction hash:    0x7c739c6f38add5a73cdfef42d3f9cb3b6ce428990c4e97cd825701453c771cdd
-   > Blocks: 1            Seconds: 8
-   > contract address:    0x7cDC1ef57833828DdDfCd84F068b1cc9A0437b8c
-   > block number:        42377
-   > block timestamp:     1596513574
+   > transaction hash:    0x3034530ec4edbecbbf1c40e9278f932eb0faa9ce110fec07be4c1918efe0aab8
+   > Blocks: 1            Seconds: 4
+   > contract address:    0xc5D3161BdA847a88D55163F93e347fd707DA6730
+   > block number:        64712
+   > block timestamp:     1596796363
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999989.447928600000000004
-   > gas used:            3846143 (0x3aafff)
+   > balance:             9999999999999999989.292989840000000004
+   > gas used:            3878932 (0x3b3014)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.07692286 ETH
+   > total cost:          0.07757864 ETH
 
 
    Deploying 'TokenManagerProxy'
    -----------------------------
-   > transaction hash:    0x0629a3d6d77170f5c3d9aeea307f923ae767cf165c30fe8cd85a8e0111f5509c
+   > transaction hash:    0x49e4c0672086789d15c18d10a32c05662b262777d9da7dbd14c7fe7aafc23c64
    > Blocks: 1            Seconds: 4
-   > contract address:    0x408A8162BC536A35Df3585686B2d62C301B94Fe9
-   > block number:        42378
-   > block timestamp:     1596513580
+   > contract address:    0xFd2985b1943B3Bf794635c5eE5741ebc933391fD
+   > block number:        64714
+   > block timestamp:     1596796369
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999989.434274080000000004
-   > gas used:            682726 (0xa6ae6)
+   > balance:             9999999999999999989.280108400000000004
+   > gas used:            644072 (0x9d3e8)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.01365452 ETH
+   > total cost:          0.01288144 ETH
 
 
    Deploying 'OracleDelegate'
    --------------------------
-   > transaction hash:    0x646ec18540c4652023b1084f8e79fc550bf1633ed02c0b2cdfc1b7f243710b6c
-   > Blocks: 1            Seconds: 4
-   > contract address:    0x84bEAF9824E23F6da1e04F47F730A261EFceeC37
-   > block number:        42380
-   > block timestamp:     1596513596
+   > transaction hash:    0xaada3cc19f6deeba91ee1af9311ecdc9125c08e45d7ce412718688965b01c657
+   > Blocks: 0            Seconds: 40
+   > contract address:    0xDEdDf1DB8C799c46a9cDE3B3D98A2f56F62270Ba
+   > block number:        64716
+   > block timestamp:     1596796378
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999989.412546640000000004
-   > gas used:            1040771 (0xfe183)
+   > balance:             9999999999999999989.258481400000000004
+   > gas used:            1035749 (0xfcde5)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.02081542 ETH
+   > total cost:          0.02071498 ETH
 
 
    Deploying 'OracleProxy'
    -----------------------
-   > transaction hash:    0x0e48bbb375054a433868478a3eac4a2ed3c86d68104c6f2fe5bfe453120e9cbd
-   > Blocks: 1            Seconds: 8
-   > contract address:    0x336C1C02bb0C426042A9f05B85f616D7f28aBa1e
-   > block number:        42381
-   > block timestamp:     1596513601
+   > transaction hash:    0x793dab26d5176a63ac2374667833f18f0ff8df7a4833b9aaf19dbe47dfe4ce52
+   > Blocks: 1            Seconds: 20
+   > contract address:    0xc41F523817011a4F7f1c517aeEe0E6eE01918481
+   > block number:        64717
+   > block timestamp:     1596796418
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             9999999999999999989.401785040000000004
-   > gas used:            538080 (0x835e0)
+   > balance:             9999999999999999989.247862260000000004
+   > gas used:            530957 (0x81a0d)
    > gas price:           20 gwei
    > value sent:          0 ETH
-   > total cost:          0.0107616 ETH
+   > total cost:          0.01061914 ETH
 
+
+   Deploying 'StoremanGroupAdmin'
+   ------------------------------
+   > transaction hash:    0xd2b64377d150bcd0fb8b35d4f8471a355b36b938dad528853aa0beb199b37275
+   > Blocks: 0            Seconds: 12
+   > contract address:    0x61586763d4D8DFB752d4a0322803f76ac24068C3
+   > block number:        64719
+   > block timestamp:     1596796468
+   > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
+   > balance:             9999999999999999989.228467920000000004
+   > gas used:            924116 (0xe19d4)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01848232 ETH
+
+etc address = 0xbfde7eE301Dd67C15cDc6C8A945948DA83d22348
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:           0.1221544 ETH
+   > Total cost:          0.14027652 ETH
 
 
 Summary
 =======
-> Total deployments:   5
-> Final cost:          0.12610014 ETH
+> Total deployments:   6
+> Final cost:          0.14422226 ETH

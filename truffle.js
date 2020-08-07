@@ -21,7 +21,7 @@ module.exports = {
       network_id: "*",
       gas: 10000000,
       gasPrice: 180000000000,
-      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
+      from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
     },
     eth179: {
       host: "192.168.1.179",
