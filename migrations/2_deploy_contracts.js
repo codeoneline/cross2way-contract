@@ -29,7 +29,7 @@ module.exports = async (deployer, network, accounts) => {
   await StoremanGroupAdmin.deployed();
 
   // const link = await MappingToken.new('link on eth to os', 'LINK', 18);
-  // console.log(`address = ${link.address}`)
+  // console.log(`link address = ${link.address}`)
   const fnx = await MappingToken.new('fnx on wan os', 'FNX', 18);
-  console.log(`address = ${fnx.address}`)
+  console.log(`fnx address = ${fnx.address}`)
 }
