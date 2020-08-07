@@ -1,0 +1,103 @@
+> Network name:    'wan179_7654'
+> Network id:      6
+> Block gas limit: 10000000 (0x989680)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0x35aaa92416605a8757354ef6c5acacfb57121fb52bb0744cb928f8d4ce0476b6
+   > Blocks: 0            Seconds: 0
+   > contract address:    0xbBe68ed1f9a946ca1f0F7d48e1D7F3B5114bc8fC
+   > block number:        352129
+   > block timestamp:     1596439878
+   > account:             0x2d0E7c0813A51d3bd1d08246Af2A8a7A57d8922E
+   > balance:             9999999999999959404.741875890436188704
+   > gas used:            224195 (0x36bc3)
+   > gas price:           180 gwei
+   > value sent:          0 ETH
+   > total cost:          0.0403551 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:           0.0403551 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+   Deploying 'TokenManagerProxy'
+   -----------------------------
+   > transaction hash:    0xda2c1794071765b5534b960deadf6192838a3a43c08ebf2bc689496630731cd2
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x5439fc20B2C6ea4d3De12c730CeD01B2d46041Bf
+   > block number:        352132
+   > block timestamp:     1596439881
+   > account:             0x2d0E7c0813A51d3bd1d08246Af2A8a7A57d8922E
+   > balance:             9999999999999959404.586160410436188704
+   > gas used:            823178 (0xc8f8a)
+   > gas price:           180 gwei
+   > value sent:          0 ETH
+   > total cost:          0.14817204 ETH
+
+
+   Deploying 'TokenManagerDelegate'
+   --------------------------------
+   > transaction hash:    0x8d87c81e01424877a181c93966d725073241784ac4fbd5e118a06284d92aec43
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x48541A34eb778CA6E69100733Dd540f8dC463AC3
+   > block number:        352134
+   > block timestamp:     1596439883
+   > account:             0x2d0E7c0813A51d3bd1d08246Af2A8a7A57d8922E
+   > balance:             9999999999999959403.746362315436188704
+   > gas used:            4665443 (0x473063)
+   > gas price:           180 gwei
+   > value sent:          0 ETH
+   > total cost:          0.83977974 ETH
+
+
+   Deploying 'OracleProxy'
+   -----------------------
+   > transaction hash:    0x1fef76374ca67b1ded270033bd006d157e3415829e1320d2a2bdbc3359cdad78
+   > Blocks: 0            Seconds: 0
+   > contract address:    0x68F278f96FcE24b3E7CED3cd9D4B809c903C1158
+   > block number:        352138
+   > block timestamp:     1596439887
+   > account:             0x2d0E7c0813A51d3bd1d08246Af2A8a7A57d8922E
+   > balance:             9999999999999959403.622788494436188704
+   > gas used:            641376 (0x9c960)
+   > gas price:           180 gwei
+   > value sent:          0 ETH
+   > total cost:          0.11544768 ETH
+
+
+   Deploying 'OracleDelegate'
+   --------------------------
+   > transaction hash:    0x9340d13b177b5f456d01f43c4ad39f17a508b88c4a8524be24f0530e3286522e
+   > Blocks: 0            Seconds: 0
+   > contract address:    0xf4bcf5aDBbF2EbA28Dd18acFb53845C7B8800e32
+   > block number:        352140
+   > block timestamp:     1596439889
+   > account:             0x2d0E7c0813A51d3bd1d08246Af2A8a7A57d8922E
+   > balance:             9999999999999959403.395369325436188704
+   > gas used:            1263367 (0x134707)
+   > gas price:           180 gwei
+   > value sent:          0 ETH
+   > total cost:          0.22740606 ETH
+
+fnx address = 0x025d32e1801d567588ef62b29435649f344a694b
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          1.33080552 ETH
+
+
+Summary
+=======
+> Total deployments:   5
+> Final cost:          1.37116062 ETH
