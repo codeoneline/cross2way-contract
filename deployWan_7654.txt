@@ -18,13 +18,13 @@ Starting migrations...
 
    Replacing 'Migrations'
    ----------------------
-   > transaction hash:    0x18beb3c0fd2de2864759b06db250a222cd39d88700af55f08cfbe5f8f6de4595
+   > transaction hash:    0x6c11b2862e408dd975d9594e08b959035664ebe1253596eb954ba304ee5d0946
    > Blocks: 0            Seconds: 0
-   > contract address:    0x900DED1E6E120bFBe53fCc014EcE15a12ac1b79B
-   > block number:        705510
-   > block timestamp:     1596795716
+   > contract address:    0x90eec7a82B06A959309dD2A4eDB84aC9b51A3A5D
+   > block number:        1041861
+   > block timestamp:     1597133923
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099999.949622986
+   > balance:             101099998.142076666
    > gas used:            224195 (0x36bc3)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -42,13 +42,13 @@ Starting migrations...
 
    Replacing 'TokenManagerDelegate'
    --------------------------------
-   > transaction hash:    0x39bd55f7ea26145ade1fb2c6417c47f942ee39ca4dbdee18bd966f82d031e332
+   > transaction hash:    0xd166e6e5f45bb8909041e4f4284732d85b116561b063fbe5690289fb527d1677
    > Blocks: 0            Seconds: 0
-   > contract address:    0xb4cd1F135De089Eb287a777BE3b51763B61caa9B
-   > block number:        705512
-   > block timestamp:     1596795718
+   > contract address:    0x3a3c9019dA4E8141a7a009285B869432429A79f3
+   > block number:        1041864
+   > block timestamp:     1597133926
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099999.091573066
+   > balance:             101099997.284026746
    > gas used:            4725036 (0x48192c)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -57,13 +57,13 @@ Starting migrations...
 
    Replacing 'TokenManagerProxy'
    -----------------------------
-   > transaction hash:    0xab871d37fedc37c2f1aa22b4a9b0d0a31b8ae6e6868169cc034caa08aacc2972
+   > transaction hash:    0xd1c30ea4948654bdfa97c1fa0a16b20dffee006a2e4375f7f5700f0afb234d49
    > Blocks: 0            Seconds: 0
-   > contract address:    0xa88b05B009f4dD331174194eB029c0FE5E233795
-   > block number:        705513
-   > block timestamp:     1596795719
+   > contract address:    0x7cDC1ef57833828DdDfCd84F068b1cc9A0437b8c
+   > block number:        1041865
+   > block timestamp:     1597133927
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099998.951826106
+   > balance:             101099997.144279786
    > gas used:            776372 (0xbd8b4)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -72,13 +72,13 @@ Starting migrations...
 
    Replacing 'OracleDelegate'
    --------------------------
-   > transaction hash:    0x663a87fbad21d70db30b7384447f7cfce9ce1a1b2bfe4574dabfa2249ab89029
-   > Blocks: 0            Seconds: 0
-   > contract address:    0xB8EB5Cc981A86eC407a5B6C0f72F58D858841b41
-   > block number:        705515
-   > block timestamp:     1596795721
+   > transaction hash:    0x40d435fe6b54068130adfae94dc30434d047b37279dddca8d4d657d7333af6cb
+   > Blocks: 4            Seconds: 4
+   > contract address:    0x8B2778e3DEF18bd4407a66c529DCbe4C2DFdEc82
+   > block number:        1041870
+   > block timestamp:     1597133932
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099998.717479426
+   > balance:             101099996.909933106
    > gas used:            1256877 (0x132dad)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -87,13 +87,13 @@ Starting migrations...
 
    Replacing 'OracleProxy'
    -----------------------
-   > transaction hash:    0x90310c8b9d7ba453d28c95a5ede66f9b44edd447103a1f35ca8b046f891ce125
+   > transaction hash:    0x6944ed380cb9576002d599c640327da80a54556d2e6652764e96b31bca4bde2f
    > Blocks: 0            Seconds: 0
-   > contract address:    0x20d6F5a0737f4eF62e036e044c19BC7745947FB9
-   > block number:        705516
-   > block timestamp:     1596795722
+   > contract address:    0x84bEAF9824E23F6da1e04F47F730A261EFceeC37
+   > block number:        1041871
+   > block timestamp:     1597133933
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099998.603613406
+   > balance:             101099996.796067086
    > gas used:            632589 (0x9a70d)
    > gas price:           180 gwei
    > value sent:          0 ETH
@@ -102,19 +102,19 @@ Starting migrations...
 
    Replacing 'StoremanGroupAdmin'
    ------------------------------
-   > transaction hash:    0xa1c9379c6c0373376001900dd8c92874b0d74c1ae6e2ee186a860287239f5aa5
+   > transaction hash:    0x4ec15e9cc030a49b5f3faf5b6e293ea1453103d31fbcf39b635d1097052f15ae
    > Blocks: 0            Seconds: 0
-   > contract address:    0xd6378182182611f737a8FC80f8bf5a57961bADf6
-   > block number:        705518
-   > block timestamp:     1596795724
+   > contract address:    0x555546475F2728F0D77CEF825A9f834139B46d89
+   > block number:        1041874
+   > block timestamp:     1597133936
    > account:             0x9dA26FC2E1D6Ad9FDD46138906b0104ae68a65D8
-   > balance:             101099998.392500586
+   > balance:             101099996.584954266
    > gas used:            1127800 (0x113578)
    > gas price:           180 gwei
    > value sent:          0 ETH
    > total cost:          0.203004 ETH
 
-fnx address = 0x5168233616B1A9Af619D17eF195D16a82B9906E8
+fnx address = 0x1BdB3aa46Ffa3A296B2c541375d46E6fa0982797
 
    > Saving migration to chain.
    > Saving artifacts
@@ -126,3 +126,6 @@ Summary
 =======
 > Total deployments:   6
 > Final cost:          1.57371642 ETH
+
+
+jsw@pc:~/code/codeoneline/cross2way-contracts$ 
