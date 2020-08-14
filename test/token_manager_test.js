@@ -134,7 +134,11 @@ contract('TokenManagerDelegate', (accounts) => {
 
       await token.transfer(admin, 80, {from: other});
 
+      gas1 = await tokenManagerDelegate.burnToken.estimateGas(tokenPairID, 20, {from: admin});
+      console.log(`burnToken estimate = ${gas1}`);
       receipt = await tokenManagerDelegate.burnToken(tokenPairID, 20, {from: admin});
+      console.log(`burnToken used = ${receipt.receipt.gasUsed}`);
+
       // // check BurnToken event log
       // const burnTokenEvent = receipt.logs[0].args;
       // assert.equal(tokenPairID, burnTokenEvent.id.toNumber());
@@ -192,8 +196,12 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(tokenPairs3.id[0].toNumber(), 12);
       assert.equal(tokenPairs3.id.length, 1);
 
+      gas1 = await tokenManagerDelegate.updateTokenPair.estimateGas(13, [aNewAccount, "new name", "new symbol", 8, aChainID + 100],
+        toChainID + 1, fromAccount, fromChainID + 1, web3.utils.hexToBytes(token.address));
+      console.log(`updateTokenPair estimate = ${gas1}`);
       receipt = await tokenManagerDelegate.updateTokenPair(13, [aNewAccount, "new name", "new symbol", 8, aChainID + 100],
         toChainID + 1, fromAccount, fromChainID + 1, web3.utils.hexToBytes(token.address));
+      console.log(`updateTokenPair used = ${gas1}`);
       // check UpdateTokenPair event log
       const updateTokenPairEvent = receipt.logs[0].args;
       assert.equal(updateTokenPairEvent.id.toNumber(), 13);
