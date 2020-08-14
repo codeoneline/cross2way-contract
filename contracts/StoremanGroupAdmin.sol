@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity 0.7.0;
 pragma experimental ABIEncoderV2;
 
 contract StoremanGroupAdmin {
@@ -114,7 +114,7 @@ contract StoremanGroupAdmin {
     external
   {
     mapConfig[groupId].status = uint8(GroupStatus.dismissed);
-    emit StoremanGroupDismissedLogger(tokenOrigAccount, storemanGroup, now);
+    emit StoremanGroupDismissedLogger(tokenOrigAccount, storemanGroup, block.timestamp);
   }
 
   function contribute() public payable {

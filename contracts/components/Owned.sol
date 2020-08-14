@@ -25,7 +25,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.12;
+pragma solidity 0.7.0;
 
 /// @dev `Owned` is a base level contract that assigns an `owner` that can be
 ///  later changed
