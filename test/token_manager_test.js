@@ -205,11 +205,11 @@ contract('TokenManagerDelegate', (accounts) => {
       // check UpdateTokenPair event log
       const updateTokenPairEvent = receipt.logs[0].args;
       assert.equal(updateTokenPairEvent.id.toNumber(), 13);
-      assert.equal(updateTokenPairEvent.ancestorAccount, web3.utils.bytesToHex(aNewAccount));
-      assert.equal(updateTokenPairEvent.ancestorName, "new name");
-      assert.equal(updateTokenPairEvent.ancestorSymbol, "new symbol");
-      assert.equal(updateTokenPairEvent.ancestorDecimals.toNumber(), 8);
-      assert.equal(updateTokenPairEvent.ancestorChainID.toNumber(), aChainID + 100);
+      assert.equal(updateTokenPairEvent.aInfo.account, web3.utils.bytesToHex(aNewAccount));
+      assert.equal(updateTokenPairEvent.aInfo.name, "new name");
+      assert.equal(updateTokenPairEvent.aInfo.symbol, "new symbol");
+      assert.equal(parseInt(updateTokenPairEvent.aInfo.decimals), 8);
+      assert.equal(parseInt(updateTokenPairEvent.aInfo.chainID), aChainID + 100);
       assert.equal(updateTokenPairEvent.fromChainID.toNumber(), toChainID + 1);
       assert.equal(updateTokenPairEvent.fromAccount, web3.utils.bytesToHex(fromAccount));
       assert.equal(updateTokenPairEvent.toChainID.toNumber(), fromChainID + 1);
