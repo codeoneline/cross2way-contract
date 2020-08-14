@@ -195,20 +195,24 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(tokenPairs3.id[0].toNumber(), 12);
       assert.equal(tokenPairs3.id.length, 1);
 
+      gas1 = await tokenManagerDelegate.updateTokenPair.estimateGas(13, [aNewAccount, "new name", "new symbol", 8, aChainID + 100],
+        toChainID + 1, fromAccount, fromChainID + 1, web3.utils.hexToBytes(token.address));
+      console.log(`updateTokenPair estimate = ${gas1}`);
       receipt = await tokenManagerDelegate.updateTokenPair(13, [aNewAccount, "new name", "new symbol", 8, aChainID + 100],
         toChainID + 1, fromAccount, fromChainID + 1, web3.utils.hexToBytes(token.address));
+      console.log(`updateTokenPair used = ${gas1}`);
       // check UpdateTokenPair event log
-      // const updateTokenPairEvent = receipt.logs[0].args;
-      // assert.equal(updateTokenPairEvent.id.toNumber(), 13);
-      // assert.equal(updateTokenPairEvent.ancestorAccount, web3.utils.bytesToHex(aNewAccount));
-      // assert.equal(updateTokenPairEvent.ancestorName, "new name");
-      // assert.equal(updateTokenPairEvent.ancestorSymbol, "new symbol");
-      // assert.equal(updateTokenPairEvent.ancestorDecimals.toNumber(), 8);
-      // assert.equal(updateTokenPairEvent.ancestorChainID.toNumber(), aChainID + 100);
-      // assert.equal(updateTokenPairEvent.fromChainID.toNumber(), toChainID + 1);
-      // assert.equal(updateTokenPairEvent.fromAccount, web3.utils.bytesToHex(fromAccount));
-      // assert.equal(updateTokenPairEvent.toChainID.toNumber(), fromChainID + 1);
-      // assert.equal(updateTokenPairEvent.toAccount, token.address.toLowerCase());
+      const updateTokenPairEvent = receipt.logs[0].args;
+      assert.equal(updateTokenPairEvent.id.toNumber(), 13);
+      assert.equal(updateTokenPairEvent.aInfo.account, web3.utils.bytesToHex(aNewAccount));
+      assert.equal(updateTokenPairEvent.aInfo.name, "new name");
+      assert.equal(updateTokenPairEvent.aInfo.symbol, "new symbol");
+      assert.equal(updateTokenPairEvent.aInfo.decimals.toNumber(), 8);
+      assert.equal(updateTokenPairEvent.aInfo.chainID.toNumber(), aChainID + 100);
+      assert.equal(updateTokenPairEvent.fromChainID.toNumber(), toChainID + 1);
+      assert.equal(updateTokenPairEvent.fromAccount, web3.utils.bytesToHex(fromAccount));
+      assert.equal(updateTokenPairEvent.toChainID.toNumber(), fromChainID + 1);
+      assert.equal(updateTokenPairEvent.toAccount, token.address.toLowerCase());
 
       const tokenPairs4 = await tokenManagerDelegate.getTokenPairsByChainID(fromChainID + 1, toChainID + 1);
       assert.equal(tokenPairs4.id[1].toNumber(), 12);
