@@ -24,7 +24,7 @@
 //
 //
 
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
 
 /**
  * Math operations with safety checks

@@ -1,4 +1,4 @@
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
 pragma experimental ABIEncoderV2;
 
 contract StoremanGroupAdmin {
@@ -47,10 +47,10 @@ contract StoremanGroupAdmin {
     bytes32 groupId,
     uint8 status,
     uint deposit,
-    uint[2] chain,
-    uint[2] curve,
-    bytes gpk1,
-    bytes gpk2,
+    uint[2] calldata chain,
+    uint[2] calldata curve,
+    bytes calldata gpk1,
+    bytes calldata gpk2,
     uint startTime,
     uint endTime
   )
@@ -65,7 +65,7 @@ contract StoremanGroupAdmin {
   )
     external
     view
-    returns(bytes32 groupId, uint8 status, uint deposit, uint chain1, uint chain2, uint curve1, uint curve2,  bytes gpk1, bytes gpk2, uint startTime, uint endTime)
+    returns(bytes32 groupId, uint8 status, uint deposit, uint chain1, uint chain2, uint curve1, uint curve2,  bytes memory gpk1, bytes memory gpk2, uint startTime, uint endTime)
   {
     groupId = id;
 
@@ -107,7 +107,7 @@ contract StoremanGroupAdmin {
     emit StoremanGroupUnregisterEvent(groupId);
   }
 
-  function storemanGroupDismiss(bytes tokenOrigAccount, bytes storemanGroup, bytes32 groupId)
+  function storemanGroupDismiss(bytes calldata tokenOrigAccount, bytes calldata storemanGroup, bytes32 groupId)
   // function storemanGroupDismiss(bytes tokenOrigAccount, bytes storemanGroup, bytes32 )
     external
   {

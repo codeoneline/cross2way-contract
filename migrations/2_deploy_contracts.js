@@ -35,10 +35,10 @@ module.exports = async (deployer, network, accounts) => {
   // console.log(`link address = ${link.address}`)
   // const fnx = await MappingToken.new('fnx on wan os', 'FNX', 18);
   // console.log(`fnx address = ${fnx.address}`)
-  const btc = await MappingToken.new('btc on wan', 'BTC', 18);
-  console.log(`btc address = ${btc.address}`)
-  const eos = await MappingToken.new('eos on wan', 'EOS', 18);
-  console.log(`eos address = ${eos.address}`)
+  // const btc = await MappingToken.new('btc on wan', 'BTC', 18);
+  // console.log(`btc address = ${btc.address}`)
+  // const eos = await MappingToken.new('eos on wan', 'EOS', 18);
+  // console.log(`eos address = ${eos.address}`)
 
 
   // const aAccount = web3.utils.hexToBytes("0x6b175474e89094c44da98b954eedeac495271d0f");

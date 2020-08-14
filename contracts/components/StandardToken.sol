@@ -25,7 +25,7 @@
 //
 
 
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
 
 import "./WRC20Protocol.sol";
 import "../lib/SafeMath.sol";

@@ -1,11 +1,12 @@
 module.exports = {
   networks: {
     development: {
-      host: "127.0.0.1",
-      port: 7545,
+      host: "192.168.1.179",
+      port: 18545,
       network_id: "*",
       gas: 10000000,
       gasPrice: 180000000000,
+      from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
     },
     wan179: {
       host: "192.168.1.179",
@@ -70,7 +71,7 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: '0.4.26',
+      version: '0.5.12',
       docker: false,
       settings: {
         optimizer: {

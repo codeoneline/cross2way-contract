@@ -24,7 +24,8 @@
 //
 //
 
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
+pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
 
@@ -64,7 +65,7 @@ contract TokenManagerStorage is BasicStorage {
     mapping(address => bool) public mapAdmin;
 
     /// a map from a sequence ID to token pair
-    mapping(uint => TokenPairInfo) public mapTokenPairInfo;
+    mapping(uint => TokenPairInfo) mapTokenPairInfo;
     // index -> tokenPairId
     mapping(uint => uint) public mapTokenPairIndex;
 }

@@ -24,16 +24,16 @@
 //
 //
 
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
 import '../components/StandardToken.sol';
 
 interface IMappingToken {
-    function changeOwner(address _newOwner) public;
-    function acceptOwnership() public;
-    function name() external view returns (string);
-    function symbol() external view returns (string);
+    function changeOwner(address _newOwner) external;
+    function acceptOwnership() external;
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
     function decimals() external view returns (uint8);
     function mint(address, uint) external;
     function burn(address, uint) external;
-    function update(string, string) external;
+    function update(string calldata, string calldata) external;
 }

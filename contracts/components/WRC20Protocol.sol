@@ -1,4 +1,4 @@
-pragma solidity 0.4.26;
+pragma solidity 0.5.12;
 
 contract WRC20Protocol {
     /* This is a slight change to the ERC20 base standard.
