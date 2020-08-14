@@ -23,8 +23,9 @@
 //    \_/\_/ \__,_|_| |_|\___|_| |_|\__,_|_|_| |_|\__,_|\___| \_/
 //
 //
+// SPDX-License-Identifier: MIT
 
-pragma solidity 0.5.12;
+pragma solidity 0.6.12;
 import './Owned.sol';
 
 contract Halt is Owned {

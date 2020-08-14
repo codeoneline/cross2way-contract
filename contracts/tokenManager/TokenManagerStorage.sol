@@ -23,8 +23,9 @@
 //    \_/\_/ \__,_|_| |_|\___|_| |_|\__,_|_|_| |_|\__,_|\___| \_/
 //
 //
+// SPDX-License-Identifier: MIT
 
-pragma solidity 0.5.12;
+pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 
 import "../components/BasicStorage.sol";
@@ -45,11 +46,11 @@ contract TokenManagerStorage is BasicStorage {
     }
 
     struct TokenPairInfo {
-      AncestorInfo aInfo;               /// TODO:
-      uint      fromChainID;            /// index in coinType.txt; e.g. eth=60, etc=61, wan=5718350
-      bytes     fromAccount;            /// from address
-      uint      toChainID;              ///
-      bytes     toAccount;              /// to token address
+      AncestorInfo aInfo;
+      uint      fromChainID;
+      bytes     fromAccount;
+      uint      toChainID;
+      bytes     toAccount;
     }
 
 
@@ -64,7 +65,7 @@ contract TokenManagerStorage is BasicStorage {
     /// only HTLC contract address can mint and burn token
     mapping(address => bool) public mapAdmin;
 
-    /// a map from a sequence ID to token pair
+    // a map from a sequence ID to token pair
     mapping(uint => TokenPairInfo) mapTokenPairInfo;
     // index -> tokenPairId
     mapping(uint => uint) public mapTokenPairIndex;
