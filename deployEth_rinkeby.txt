@@ -1,0 +1,22 @@
+block number:        7038976
+
+wan2eth: {
+	name:'WAN@ethereum', 
+	symbol: 'WAN',
+	decimals: 18,
+	address: '0x12a139B8E453E761eC21BB58E22Be9a5D3Ef54dC'
+}
+
+btc2eth: {
+	name:'wanBTC@ethereum', 
+	symbol: 'wanBTC',
+	decimals: 8,
+	address: '0xE2A1dc77aAD2BB6b493c491572e822381f2a6E5d'
+}
+
+eos2eth: {
+	name: 'wanEOS@ethereum',
+	symbol: 'wanEOS',
+	decimals: 4,
+	address: '0x5529688926D5B4359E78F6D223C4BC63a249De2a'
+}
