@@ -44,9 +44,9 @@ module.exports = async (deployer, network, accounts) => {
   console.log(`account ${accounts}`);
   const wan2eth = await MappingToken.new('WAN@ethereum', 'wanETH', 18);
   console.log(`wan2eth address = ${wan2eth.address}`)
-  const btc2eth = await MappingToken.new('wanBTC@ethereum', 'wanBTC', 18);
+  const btc2eth = await MappingToken.new('wanBTC@ethereum', 'wanBTC', 8);
   console.log(`btc2eth address = ${btc2eth.address}`)
-  const eos2eth = await MappingToken.new('wanEOS@ethereum', 'wanEOS', 18);
+  const eos2eth = await MappingToken.new('wanEOS@ethereum', 'wanEOS', 4);
   console.log(`eos2eth address = ${eos2eth.address}`)
 
 

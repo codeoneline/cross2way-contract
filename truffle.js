@@ -37,11 +37,8 @@ module.exports = {
       from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
     },
     eth_rinkeby: {
-      provider: function() {
-        // mnemonic
-        return new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64')
-      } ,
-      // provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+      // provider: new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+      provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
       network_id: 4,
       gas: 8000000,
       gasPrice: 10000000000
