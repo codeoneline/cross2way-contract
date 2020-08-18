@@ -46,8 +46,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
 
      event AddToken(address tokenAddress, string name, string symbol, uint8 decimals);
      event AddTokenPair(uint indexed id, uint fromChainID, bytes fromAccount, uint toChainID, bytes toAccount);
-     event UpdateTokenPair(uint indexed id, bytes ancestorAccount, string ancestorName, string ancestorSymbol, uint8 ancestorDecimals,
-      uint ancestorChainID,uint fromChainID, bytes fromAccount, uint toChainID, bytes toAccount);
+     event UpdateTokenPair(uint indexed id, AncestorInfo aInfo, uint fromChainID, bytes fromAccount, uint toChainID, bytes toAccount);
      event RemoveTokenPair(uint indexed id);
      event AddAdmin(address admin);
      event RemoveAdmin(address admin);
@@ -182,8 +181,7 @@ contract TokenManagerDelegate is TokenManagerStorage, Owned {
         mapTokenPairInfo[id].toChainID = toChainID;
         mapTokenPairInfo[id].toAccount = toAccount;
 
-        emit UpdateTokenPair(id, aInfo.account, aInfo.name, aInfo.symbol, aInfo.decimals, aInfo.chainID,
-            fromChainID, fromAccount, toChainID, toAccount);
+        emit UpdateTokenPair(id, aInfo, fromChainID, fromAccount, toChainID, toAccount);
     }
 
     function removeTokenPair(
