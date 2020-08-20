@@ -31,14 +31,14 @@ module.exports = async (deployer, network, accounts) => {
 
   // const etcToken = await MappingToken.new('token on etc to os', 'TOKEN', 18);
   // console.log(`etc address = ${etcToken.address}`)
-  // const link = await MappingToken.new('link on eth to os', 'LINK', 18);
+  // const link = await MappingToken.new('link', 'LINK', 18);
   // console.log(`link address = ${link.address}`)
-  // const fnx = await MappingToken.new('fnx on wan os', 'FNX', 18);
-  // console.log(`fnx address = ${fnx.address}`)
-  // const btc = await MappingToken.new('btc on wan', 'BTC', 18);
-  // console.log(`btc address = ${btc.address}`)
-  // const eos = await MappingToken.new('eos on wan', 'EOS', 18);
-  // console.log(`eos address = ${eos.address}`)
+  const fnx = await MappingToken.new('fnx', 'FNX', 18);
+  console.log(`fnx address = ${fnx.address}`)
+  const btc = await MappingToken.new('btc', 'BTC', 8);
+  console.log(`btc address = ${btc.address}`)
+  const eos = await MappingToken.new('eos', 'EOS', 4);
+  console.log(`eos address = ${eos.address}`)
 
   // const receipt = await deployer.deploy(MappingToken, 'WAN@ethereum', 'WAN', 18)
   // console.log(JSON.stringify(receipt));

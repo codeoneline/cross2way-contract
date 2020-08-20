@@ -39,12 +39,12 @@ module.exports = {
     eth_rinkeby: {
       // provider: new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
       provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
-      network_id: 4,
+      network_id: "*",
       gas: 8000000,
       gasPrice: 10000000000
     },
     eth_ropsten: {
-      provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+      provider: new PrivateKeyProvider(process.env.PK, 'https://ropsten.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
       network_id: 3,
       gas: 8000000,
       gasPrice: 10000000000
