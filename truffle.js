@@ -36,29 +36,29 @@ module.exports = {
       gasPrice: 20000000000,
       from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
     },
-    eth_rinkeby: {
-      // provider: new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
-      provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
-      network_id: "*",
-      gas: 8000000,
-      gasPrice: 10000000000
-    },
-    eth_ropsten: {
-      provider: new PrivateKeyProvider(process.env.PK, 'https://ropsten.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
-      network_id: 3,
-      gas: 8000000,
-      gasPrice: 10000000000
-    },
+    // eth_rinkeby: {
+    //   // provider: new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+    //   provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+    //   network_id: "*",
+    //   gas: 8000000,
+    //   gasPrice: 10000000000
+    // },
+    // eth_ropsten: {
+    //   provider: new PrivateKeyProvider(process.env.PK, 'https://ropsten.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+    //   network_id: 3,
+    //   gas: 8000000,
+    //   gasPrice: 10000000000
+    // },
 
-    eth_mainnet: {
-      provider: function() {
-        // mnemonic
-        return new HDWalletProvider(process.env.PK, 'https://mainnet.infura.io')
-      } ,
-      network_id: 1,
-      gas: 8000000,
-      gasPrice: 10000000000
-    },
+    // eth_mainnet: {
+    //   provider: function() {
+    //     // mnemonic
+    //     return new HDWalletProvider(process.env.PK, 'https://mainnet.infura.io')
+    //   } ,
+    //   network_id: 1,
+    //   gas: 8000000,
+    //   gasPrice: 10000000000
+    // },
     etc179: {
       host: "192.168.1.179",
       port: 38545,

@@ -4,7 +4,8 @@ const OracleDelegate = artifacts.require('OracleDelegate');
 const assert = require('assert');
 const { sendAndGetReason } = require('./helper.js');
 const { waitForDebugger } = require('inspector');
-const from = require('../truffle').networks.development.from;
+const netConfig = require('../truffle').networks[global.network];
+const from = netConfig? netConfig.from : null;
 
 const newOracle = async (accounts) => {
   const oracleProxy = await OracleProxy.new();
@@ -26,7 +27,7 @@ const getDeployedOracle = async (accounts) => {
   return {oracleProxy: oracleProxy, oracleDelegate: oracleDelegate}
 }
 
-contract('Oracle', function(accounts) {
+contract('Oracle', function(accounts, net) {
   const [owner_bk, white_bk, other] = accounts;
   const owner = from ? from : owner_bk;
   const white = white_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : white_bk;

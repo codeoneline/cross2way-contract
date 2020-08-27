@@ -7,6 +7,8 @@ const StoremanGroupAdmin = artifacts.require('StoremanGroupAdmin');
 const MappingToken = artifacts.require('MappingToken');
 
 module.exports = async (deployer, network, accounts) => {
+  console.log(`...network= ${network}`)
+  global.network = network;
   const [owner, admin, other] = accounts;
   // // deploy token manager delegate
   // await deployer.deploy(TokenManagerDelegate);
@@ -33,12 +35,12 @@ module.exports = async (deployer, network, accounts) => {
   // console.log(`etc address = ${etcToken.address}`)
   // const link = await MappingToken.new('link', 'LINK', 18);
   // console.log(`link address = ${link.address}`)
-  const fnx = await MappingToken.new('fnx', 'FNX', 18);
-  console.log(`fnx address = ${fnx.address}`)
-  const btc = await MappingToken.new('btc', 'BTC', 8);
-  console.log(`btc address = ${btc.address}`)
-  const eos = await MappingToken.new('eos', 'EOS', 4);
-  console.log(`eos address = ${eos.address}`)
+  // const fnx = await MappingToken.new('fnx', 'FNX', 18);
+  // console.log(`fnx address = ${fnx.address}`)
+  // const btc = await MappingToken.new('btc', 'BTC', 8);
+  // console.log(`btc address = ${btc.address}`)
+  // const eos = await MappingToken.new('eos', 'EOS', 4);
+  // console.log(`eos address = ${eos.address}`)
 
   // const receipt = await deployer.deploy(MappingToken, 'WAN@ethereum', 'WAN', 18)
   // console.log(JSON.stringify(receipt));

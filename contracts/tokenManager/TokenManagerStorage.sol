@@ -51,7 +51,6 @@ contract TokenManagerStorage is BasicStorage {
       bytes     toAccount;              /// to token address
     }
 
-
     /************************************************************
      **
      ** VARIABLES
