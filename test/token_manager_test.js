@@ -6,6 +6,8 @@ const assert = require('assert');
 const { sendAndGetReason } = require('./helper.js');
 const netConfig = require('../truffle').networks[global.network];
 const from = netConfig? netConfig.from : null;
+const adminAddr = netConfig? netConfig.admin : null;
+const otherAddr = netConfig? netConfig.other : null;
 
 const newTokenManager = async (accounts) => {
   const tokenManagerProxy = await TokenManagerProxy.new();
@@ -29,9 +31,11 @@ const getDeployedTokenManager = async (accounts) => {
 }
 
 contract('TokenManagerDelegate', (accounts) => {
-  const [owner_bk, admin_bk, other] = accounts;
+  const [owner_bk, admin_bk, other_bk] = accounts;
   const owner = from ? from : owner_bk;
-  const admin = admin_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : admin_bk;
+  const admin = adminAddr ? adminAddr : (admin_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : admin_bk);
+  const other = otherAddr ? otherAddr : other_bk;
+  // const admin = admin_bk.toLowerCase() === owner.toLowerCase() ? owner_bk : admin_bk;
 
   const aAccount = web3.utils.hexToBytes("0x6b175474e89094c44da98b954eedeac495271d0f");
   const aNewAccount = web3.utils.hexToBytes("0x0b175474e89094c44da98b954eedeac495271d0f");
@@ -61,7 +65,7 @@ contract('TokenManagerDelegate', (accounts) => {
   before("init", async () => {});
 
   describe('normal', () => {
-    it('good token manager example', async function() {
+    it.only('good token manager example', async function() {
       const { tokenManagerDelegate } = await newTokenManager(accounts);
 
       let receipt = await tokenManagerDelegate.addToken(nameDAI, symbolDAI, decimals, {from: owner});
@@ -176,6 +180,13 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(ancestorInfo.chainId.toNumber(), aChainID);
 
       const tokenPairs = await tokenManagerDelegate.getTokenPairs();
+      const tokenPairsFull = await tokenManagerDelegate.getTokenPairsFullFields();
+      assert.equal(tokenPairsFull[0].aInfo.name, aName)
+      assert.equal(tokenPairsFull[1].aInfo.name, aName)
+      assert.equal(tokenPairsFull[2].aInfo.name, aName)
+      assert.equal(tokenPairsFull[0].id, 11)
+      assert.equal(tokenPairsFull[1].id, 12)
+      assert.equal(tokenPairsFull[2].id, 13)
       assert.equal(tokenPairs.id[0].toNumber(), 11);
       assert.equal(tokenPairs.id[1].toNumber(), 12);
       assert.equal(tokenPairs.id[2].toNumber(), 13);
@@ -236,7 +247,7 @@ contract('TokenManagerDelegate', (accounts) => {
       await tokenManagerDelegate.changeTokenOwner(token.address, other, {from: owner});
       await token.acceptOwnership({from: other});
       const newOwner = await token.owner();
-      assert.equal(newOwner, other);
+      assert.equal(newOwner.toLowerCase(), other);
       await token.changeOwner(oldOwner, {from: other});
       await tokenManagerDelegate.acceptTokenOwnership(token.address, {from: owner});
       const newOwner2 = await token.owner();
