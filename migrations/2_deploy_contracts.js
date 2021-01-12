@@ -23,14 +23,14 @@ module.exports = async (deployer, network, accounts) => {
   // // wan testnet
   // await deployer.deploy(TokenManagerDelegate);
   // const delegate = await TokenManagerDelegate.deployed();
-  // const proxy = await TokenManagerProxy.at("0x017aB6485fF91C1A0a16B90E71f92B935B7213d3");
+  // const proxy = await TokenManagerProxy.at("0x017ab6485ff91c1a0a16b90e71f92b935b7213d3");
   // console.log(`token manager delegate : ${delegate.address}`)
   // await proxy.upgradeTo(delegate.address);
 
   // // wan testnet oracle
   // await deployer.deploy(OracleDelegate);
   // const oracleDelegate = await OracleDelegate.deployed();
-  // const oracleProxy = await OracleProxy.at("0x27933A9b0A5c21B838843d7601B6e0b488122AE9");
+  // const oracleProxy = await OracleProxy.at("0x27933a9b0a5c21b838843d7601b6e0b488122ae9");
   // console.log(`oracleDelegate : ${oracleDelegate.address}`)
   // await oracleProxy.upgradeTo(oracleDelegate.address);
 
@@ -44,7 +44,7 @@ module.exports = async (deployer, network, accounts) => {
   // rinkeby testnet oracle
   await deployer.deploy(OracleDelegate);
   const oracleDelegate = await OracleDelegate.deployed();
-  const oracleProxy = await OracleProxy.at("0xF728FB2e26Be1f12496d9F68BDDFe1Eac0eBFD26");
+  const oracleProxy = await OracleProxy.at("0xf728fb2e26be1f12496d9f68bddfe1eac0ebfd26");
   console.log(`oracleDelegate : ${oracleDelegate.address}`)
   await oracleProxy.upgradeTo(oracleDelegate.address);
 
@@ -69,6 +69,9 @@ module.exports = async (deployer, network, accounts) => {
   // const btc = await MappingToken.new('btc', 'BTC', 8);
   // console.log(`btc address = ${btc.address}`)
   // const eos = await MappingToken.new('eos', 'EOS', 4);
+  // console.log(`eos address = ${eos.address}`)
+
+  // const eos = await MappingToken.new('wanUNI@wanchain', 'wanUNI', 18);
   // console.log(`eos address = ${eos.address}`)
 
   // const receipt = await deployer.deploy(MappingToken, 'WAN@ethereum', 'WAN', 18)

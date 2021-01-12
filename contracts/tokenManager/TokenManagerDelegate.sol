@@ -216,6 +216,10 @@ contract TokenManagerDelegate is TokenManagerStorage, Admin {
         IMappingToken(tokenAddress).acceptOwnership();
     }
 
+    function transferTokenOwner(address tokenAddress, address _newOwner) external onlyOwner {
+        IMappingToken(tokenAddress).transferOwner(_newOwner);
+    }
+
     function getTokenPairInfo(
         uint id
     )
@@ -230,11 +234,18 @@ contract TokenManagerDelegate is TokenManagerStorage, Admin {
     }
 
     function getTokenInfo(uint id) external view returns (address addr, string name, string symbol, uint8 decimals) {
-        address instance = bytesToAddress(mapTokenPairInfo[id].toAccount);
-        name = IMappingToken(instance).name();
-        symbol = IMappingToken(instance).symbol();
-        decimals = IMappingToken(instance).decimals();
-        addr = instance;
+        if (mapTokenPairInfo[id].fromChainID == 0) {
+            name = '';
+            symbol = '';
+            decimals = 0;
+            addr = address(0);
+        } else {
+            address instance = bytesToAddress(mapTokenPairInfo[id].toAccount);
+            name = IMappingToken(instance).name();
+            symbol = IMappingToken(instance).symbol();
+            decimals = IMappingToken(instance).decimals();
+            addr = instance;
+        }
     }
 
     function getAncestorInfo(uint id) external view returns (bytes account, string name, string symbol, uint8 decimals, uint chainId) {
@@ -245,28 +256,59 @@ contract TokenManagerDelegate is TokenManagerStorage, Admin {
         chainId = mapTokenPairInfo[id].aInfo.chainID;
     }
 
-    function getTokenPairsFullFields()
-        external
-        view
-        returns (TokenPairInfoFull[] tokenPairs)
-    {
-        tokenPairs = new TokenPairInfoFull[](totalTokenPairs);
-        for (uint i = 0; i < totalTokenPairs; i++) {
-            uint theId = mapTokenPairIndex[i];
-            tokenPairs[i].aInfo = mapTokenPairInfo[theId].aInfo;
-            tokenPairs[i].fromChainID = mapTokenPairInfo[theId].fromChainID;
-            tokenPairs[i].fromAccount = mapTokenPairInfo[theId].fromAccount;
-            tokenPairs[i].toChainID = mapTokenPairInfo[theId].toChainID;
-            tokenPairs[i].toAccount = mapTokenPairInfo[theId].toAccount;
-            tokenPairs[i].id = theId;
-        }
-        return tokenPairs;
-    }
+    // function getTokenPairsFullFields()
+    //     external
+    //     view
+    //     returns (TokenPairInfoFull[] tokenPairs)
+    // {
+    //     tokenPairs = new TokenPairInfoFull[](totalTokenPairs);
+    //     for (uint i = 0; i < totalTokenPairs; i++) {
+    //         uint theId = mapTokenPairIndex[i];
+    //         tokenPairs[i].aInfo = mapTokenPairInfo[theId].aInfo;
+    //         tokenPairs[i].fromChainID = mapTokenPairInfo[theId].fromChainID;
+    //         tokenPairs[i].fromAccount = mapTokenPairInfo[theId].fromAccount;
+    //         tokenPairs[i].toChainID = mapTokenPairInfo[theId].toChainID;
+    //         tokenPairs[i].toAccount = mapTokenPairInfo[theId].toAccount;
+    //         tokenPairs[i].id = theId;
+    //     }
+    //     return tokenPairs;
+    // }
+
+    // function getTokenPairsByChainID2(uint chainID1, uint chainID2)
+    //     external
+    //     view
+    //     returns (TokenPairInfoFull[] tokenPairs)
+    // {
+    //     uint cnt = 0;
+    //     uint i = 0;
+    //     uint theId = 0;
+    //     uint[] memory id_valid = new uint[](totalTokenPairs);
+    //     for (; i < totalTokenPairs; i++ ) {
+    //         theId = mapTokenPairIndex[i];
+    //         if ((mapTokenPairInfo[theId].fromChainID == chainID1) && (mapTokenPairInfo[theId].toChainID == chainID2) ||
+    //         (mapTokenPairInfo[theId].toChainID == chainID1) && (mapTokenPairInfo[theId].fromChainID == chainID2)) {
+    //             id_valid[cnt] = theId;
+    //             cnt ++;
+    //         }
+    //     }
+
+    //     tokenPairs = new TokenPairInfoFull[](cnt);
+    //     for (i = 0; i < cnt; i++) {
+    //         theId = id_valid[i];
+    //         tokenPairs[i].aInfo = mapTokenPairInfo[theId].aInfo;
+    //         tokenPairs[i].fromChainID = mapTokenPairInfo[theId].fromChainID;
+    //         tokenPairs[i].fromAccount = mapTokenPairInfo[theId].fromAccount;
+    //         tokenPairs[i].toChainID = mapTokenPairInfo[theId].toChainID;
+    //         tokenPairs[i].toAccount = mapTokenPairInfo[theId].toAccount;
+    //         tokenPairs[i].id = theId;
+    //     }
+    // }
 
     function getTokenPairs()
         external
         view
-        returns (uint[] id, uint[] fromChainID, bytes[] fromAccount, uint[] toChainID, bytes[] toAccount, string[] ancestorSymbol, uint8[] ancestorDecimals)
+        returns (uint[] id, uint[] fromChainID, bytes[] fromAccount, uint[] toChainID, bytes[] toAccount,
+          string[] ancestorSymbol, uint8[] ancestorDecimals, bytes[] ancestorAccount, string[] ancestorName, uint[] ancestorChainID)
     {
         uint cnt = totalTokenPairs;
         uint theId = 0;
@@ -280,6 +322,11 @@ contract TokenManagerDelegate is TokenManagerStorage, Admin {
 
         ancestorSymbol = new string[](cnt);
         ancestorDecimals = new uint8[](cnt);
+
+        ancestorAccount = new bytes[](cnt);
+        ancestorName = new string[](cnt);
+        ancestorChainID = new uint[](cnt);
+
         i = 0;
         theId = 0;
         uint j = 0;
@@ -293,6 +340,10 @@ contract TokenManagerDelegate is TokenManagerStorage, Admin {
 
             ancestorSymbol[i] = mapTokenPairInfo[theId].aInfo.symbol;
             ancestorDecimals[i] = mapTokenPairInfo[theId].aInfo.decimals;
+
+            ancestorAccount[i] = mapTokenPairInfo[theId].aInfo.account;
+            ancestorName[i] = mapTokenPairInfo[theId].aInfo.name;
+            ancestorChainID[i] = mapTokenPairInfo[theId].aInfo.chainID;
             i ++;
         }
     }

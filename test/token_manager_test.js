@@ -156,6 +156,7 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(tokenPairInfo_get.fromChainID.toNumber(), tokenPairInfo.fromChainID.toNumber());
       
       let tokenInfo = await tokenManagerDelegate.getTokenInfo(tokenPairID);
+      const tokenInfoBad = await tokenManagerDelegate.getTokenInfo(tokenPairID + 999);
       assert.equal(tokenInfo.name, nameDAI);
       assert.equal(tokenInfo.symbol, symbolDAI);
 
@@ -171,6 +172,7 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(tokenInfo.symbol, symbolDAI_NEW);
       
       const ancestorInfo = await tokenManagerDelegate.getAncestorInfo(tokenPairID);
+      const ancestorInfoBad = await tokenManagerDelegate.getAncestorInfo(tokenPairID + 999);
       // const padAccount = web3.utils.padRight("0x6b175474e89094c44da98b954eedeac495271d0f", 64);
       const padAccount = "0x6b175474e89094c44da98b954eedeac495271d0f";
       assert.equal(ancestorInfo.account, padAccount);
@@ -180,13 +182,13 @@ contract('TokenManagerDelegate', (accounts) => {
       assert.equal(ancestorInfo.chainId.toNumber(), aChainID);
 
       const tokenPairs = await tokenManagerDelegate.getTokenPairs();
-      const tokenPairsFull = await tokenManagerDelegate.getTokenPairsFullFields();
-      assert.equal(tokenPairsFull[0].aInfo.name, aName)
-      assert.equal(tokenPairsFull[1].aInfo.name, aName)
-      assert.equal(tokenPairsFull[2].aInfo.name, aName)
-      assert.equal(tokenPairsFull[0].id, 11)
-      assert.equal(tokenPairsFull[1].id, 12)
-      assert.equal(tokenPairsFull[2].id, 13)
+      // const tokenPairsFull = await tokenManagerDelegate.getTokenPairsFullFields();
+      // assert.equal(tokenPairsFull[0].aInfo.name, aName)
+      // assert.equal(tokenPairsFull[1].aInfo.name, aName)
+      // assert.equal(tokenPairsFull[2].aInfo.name, aName)
+      // assert.equal(tokenPairsFull[0].id, 11)
+      // assert.equal(tokenPairsFull[1].id, 12)
+      // assert.equal(tokenPairsFull[2].id, 13)
       assert.equal(tokenPairs.id[0].toNumber(), 11);
       assert.equal(tokenPairs.id[1].toNumber(), 12);
       assert.equal(tokenPairs.id[2].toNumber(), 13);
@@ -247,7 +249,7 @@ contract('TokenManagerDelegate', (accounts) => {
       await tokenManagerDelegate.changeTokenOwner(token.address, other, {from: owner});
       await token.acceptOwnership({from: other});
       const newOwner = await token.owner();
-      assert.equal(newOwner.toLowerCase(), other);
+      assert.equal(newOwner.toLowerCase(), other.toLowerCase());
       await token.changeOwner(oldOwner, {from: other});
       await tokenManagerDelegate.acceptTokenOwnership(token.address, {from: owner});
       const newOwner2 = await token.owner();

@@ -4,27 +4,27 @@ console.log(`truffle pk = ${process.env.PK}`);
 
 module.exports = {
   networks: {
-    development: {
-      // host: "192.168.1.2",
-      // port: 8545,
-      // network_id: "*",
-      // gas: 10000000,
-      // gasPrice: 180000000000,
-      // admin: '0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e', 
-      // from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
-      // other:'0xced44c4eb4c1910502d2b0759eb1e8013de543e3',
-      provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
-      network_id: "*",
-      gas: 8000000,
-      gasPrice: 10000000000
-    },
+    // development: {
+    //   // host: "192.168.1.2",
+    //   // port: 8545,
+    //   // network_id: "*",
+    //   // gas: 10000000,
+    //   // gasPrice: 180000000000,
+    //   // admin: '0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e', 
+    //   // from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
+    //   // other:'0xced44c4eb4c1910502d2b0759eb1e8013de543e3',
+    //   provider: new PrivateKeyProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
+    //   network_id: "*",
+    //   gas: 8000000,
+    //   gasPrice: 10000000000
+    // },
     wan179: {
       host: "192.168.1.179",
       port: 18545,
       network_id: "*",
       gas: 10000000,
       gasPrice: 180000000000,
-      from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
+      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
     },
     wan_testnet: {
       host: "192.168.1.2",
@@ -40,7 +40,7 @@ module.exports = {
       network_id: "*",
       gas: 10000000,
       gasPrice: 180000000000,
-      from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
+      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
     },
     eth179: {
       host: "192.168.1.179",
@@ -48,7 +48,7 @@ module.exports = {
       network_id: "*",
       gas: 8000000,
       gasPrice: 20000000000,
-      from:'0x9da26fc2e1d6ad9fdd46138906b0104ae68a65d8',
+      from:'0x2d0e7c0813a51d3bd1d08246af2a8a7a57d8922e',
     },
     eth_rinkeby: {
       // provider: new HDWalletProvider(process.env.PK, 'https://rinkeby.infura.io/v3/4acb62eacb3442a38cd79a52b6cade64'),
@@ -117,7 +117,7 @@ module.exports = {
       settings: {
         optimizer: {
           enabled: true,
-          runs: 200,
+          runs: 100000,
         },
         evmVersion: 'byzantium'
       },
