@@ -7,6 +7,34 @@ const WwanToken = artifacts.require('WwanToken');
 
 const MappingToken = artifacts.require('MappingToken');
 
+const tms = {
+  "wan": {
+    "mainnet": '0x9fdf94dff979dbecc2c1a16904bdfb41d305053a',
+    "testnet": '0x017ab6485ff91c1a0a16b90e71f92b935b7213d3',
+  },
+  "eth": {
+    "mainnet": '0xbab93311de250b5b422c705129b3617b3cb6e9e1',
+    "testnet": '0x9f35da7049fd6cf80c5fe77e2e94bfd969fae16a',
+  }
+}
+
+async function DeployMapToken(name, symbol, decimals, network) {
+  const [chain, net] = network.split('-')[0].split('_')
+  tm = tms[chain][net]
+  if (tm.length !== 42) {
+    console.log(`wrong network ${network}`)
+    return 
+  }
+  console.log(`tm is ${tm}`)
+  const mapToken = await MappingToken.new(name, symbol, decimals);
+  console.log(`mapToken address = ${mapToken.address}`)
+  const mapToken_old_owner = await mapToken.owner()
+  console.log(`mapToken old owner is ${mapToken_old_owner}`)
+  await mapToken.transferOwner(tm);
+  const mapToken_new_owner = await mapToken.owner()
+  console.log(`mapToken new owner is ${mapToken_new_owner}`)
+}
+
 module.exports = async (deployer, network, accounts) => {
   console.log(`...network= ${network}`)
   global.network = network;
@@ -18,7 +46,8 @@ module.exports = async (deployer, network, accounts) => {
   // await deployer.deploy(TokenManagerProxy);
   // const proxy = await TokenManagerProxy.deployed();
   // // token manager proxy upgrade to token manager delegate
-  // await proxy.upgradeTo(delegate.address);
+  // const tx = await proxy.upgradeTo(delegate.address);
+  // console.log(JSON.stringify(tx.receipt.gasUsed))
 
   // // wan testnet
   // await deployer.deploy(TokenManagerDelegate);
@@ -42,11 +71,11 @@ module.exports = async (deployer, network, accounts) => {
   // await proxy.upgradeTo(delegate.address);
 
   // rinkeby testnet oracle
-  await deployer.deploy(OracleDelegate);
-  const oracleDelegate = await OracleDelegate.deployed();
-  const oracleProxy = await OracleProxy.at("0xf728fb2e26be1f12496d9f68bddfe1eac0ebfd26");
-  console.log(`oracleDelegate : ${oracleDelegate.address}`)
-  await oracleProxy.upgradeTo(oracleDelegate.address);
+  // await deployer.deploy(OracleDelegate);
+  // const oracleDelegate = await OracleDelegate.deployed();
+  // const oracleProxy = await OracleProxy.at("0xf728fb2e26be1f12496d9f68bddfe1eac0ebfd26");
+  // console.log(`oracleDelegate : ${oracleDelegate.address}`)
+  // await oracleProxy.upgradeTo(oracleDelegate.address);
 
   // // deploy oracle delegate
   // await deployer.deploy(OracleDelegate);
@@ -71,8 +100,12 @@ module.exports = async (deployer, network, accounts) => {
   // const eos = await MappingToken.new('eos', 'EOS', 4);
   // console.log(`eos address = ${eos.address}`)
 
-  // const eos = await MappingToken.new('wanUNI@wanchain', 'wanUNI', 18);
-  // console.log(`eos address = ${eos.address}`)
+  // const uni = await MappingToken.new('wanUNI@wanchain', 'wanUNI', 18);
+  // const uni_old_owner = await uni.owner()
+  // console.log(`uni address = ${uni.address}, owner is ${uni_old_owner}`)
+  // await uni.transferOwner("0x9fdf94dff979dbecc2c1a16904bdfb41d305053a");
+  // const uni_new_owner = await uni.owner()
+  // console.log(`uni new owner is ${uni_new_owner}`)
 
   // const receipt = await deployer.deploy(MappingToken, 'WAN@ethereum', 'WAN', 18)
   // console.log(JSON.stringify(receipt));
@@ -87,6 +120,30 @@ module.exports = async (deployer, network, accounts) => {
   // console.log(`btc2eth address = ${btc2eth.address}`)
   // const eos2eth = await MappingToken.new('wanEOS@ethereum', 'wanEOS', 4);
   // console.log(`eos2eth address = ${eos2eth.address}`)
+
+  // const btc2wan = await MappingToken.new('wanBTC@wanchain', 'wanBTC', 8);
+  // const btc2wan_old_owner = await btc2wan.owner()
+  // console.log(`btc2wan address = ${btc2wan.address}, owner is ${btc2wan_old_owner}`)
+  // await btc2wan.transferOwner("0x9fdf94dff979dbecc2c1a16904bdfb41d305053a");
+
+  // await DeployMapToken('wanBTC@wanchain', 'wanBTC', 8, network);
+  // await DeployMapToken('wanZCN@wanchain', 'wanZCN', 10, network);
+  await DeployMapToken('wanVIBE@wanchain', 'wanVIBE', 18, network);
+
+  // const sushi2wan = await MappingToken.new('wanSUSHI@wanchain', 'wanSUSHI', 18);
+  // const sushi2wan_old_owner = await sushi2wan.owner()
+  // console.log(`sushi2wan address = ${sushi2wan.address}`)
+  // await sushi2wan.transferOwner("0x017ab6485ff91c1a0a16b90e71f92b935b7213d3");
+  // const sushi2wan_new_owner = await sushi2wan.owner()
+  // console.log(`sushi2wan new owner is ${sushi2wan_new_owner}`)
+
+  // const sushi2wan = await MappingToken.new('wanSUSHI@wanchain', 'wanSUSHI', 18);
+  // const sushi2wan_old_owner = await sushi2wan.owner()
+  // console.log(`sushi2wan address = ${sushi2wan.address}`)
+  // console.log(`sushi2wan old owner is = ${sushi2wan_old_owner}`)
+  // await sushi2wan.transferOwner("0x9fdf94dff979dbecc2c1a16904bdfb41d305053a");
+  // const sushi2wan_new_owner = await sushi2wan.owner()
+  // console.log(`sushi2wan new owner is ${sushi2wan_new_owner}`)
 
 //    // wwan
 //  await deployer.deploy(WwanToken);
